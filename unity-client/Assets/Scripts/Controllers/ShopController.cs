@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Openfort.Model;
 using Unity.Services.CloudCode;
 using Unity.Services.CloudCode.Subscriptions;
+using Unity.Services.Economy;
+using Unity.Services.Economy.Model;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
@@ -122,7 +125,10 @@ public class ShopController : BaseController, IDetailedStoreListener
         switch (product.definition.type)
         {
             case ProductType.Consumable:
-                TransferTokens(productId,20);
+                //TODO
+                #if UNITY_EDITOR
+                IncrementCurrency("GOLD", 20);
+                #endif 
                 break;
             case ProductType.NonConsumable:
                 MintNFT(productId);
@@ -198,6 +204,60 @@ public class ShopController : BaseController, IDetailedStoreListener
             throw;
         }
     }
+    #endregion
+
+    #region ECONOMY_METHODS
+    private void IncrementCurrency(string currencyId, int amount)
+    {
+        try
+        {
+            var incrementBalanceTask = EconomyService.Instance.PlayerBalances.IncrementBalanceAsync(currencyId, amount);
+
+            incrementBalanceTask.ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    // Handle the error
+                    Debug.LogError(task.Exception);
+                }
+                
+                Debug.Log($"New balance: {task.Result.Balance}");
+            });
+        }
+        catch (EconomyException e)
+        {
+            Debug.LogError($"Failed to increment balance: {e.Message}");
+        }
+    }
+    
+    private void GetInGameCurrencyBalance()
+    {
+        // Call GetBalancesAsync with the options
+        var getBalancesTask = EconomyService.Instance.PlayerBalances.GetBalancesAsync();
+
+        getBalancesTask.ContinueWith(task =>
+        {
+            if (task.IsFaulted)
+            {
+                // Handle the error
+                Debug.LogError(task.Exception);
+            }
+            else
+            {
+                // Get the result and find the balance for the "GOLD" currency
+                var balancesResult = task.Result;
+                foreach (var balance in balancesResult.Balances)
+                {
+                    if (balance.CurrencyId == "GOLD")
+                    {
+                        Debug.Log($"The balance for GOLD is: {balance.Balance}");
+                        // Do something with the balance
+                    }
+                }
+            }
+        });
+    }
+
     #endregion
     
     #region CLOUD_CODE_METHODS

@@ -127,7 +127,7 @@ public class ShopController : BaseController, IDetailedStoreListener
             case ProductType.Consumable:
                 //TODO
                 #if UNITY_EDITOR
-                IncrementCurrency("GOLD", 20);
+                IncrementCurrency("GOLD", 20, productId);
                 #endif 
                 break;
             case ProductType.NonConsumable:
@@ -207,7 +207,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region ECONOMY_METHODS
-    private void IncrementCurrency(string currencyId, int amount)
+    private void IncrementCurrency(string currencyId, int amount, string productId)
     {
         try
         {
@@ -222,12 +222,11 @@ public class ShopController : BaseController, IDetailedStoreListener
                 }
                 
                 Debug.Log($"New balance: {task.Result.Balance}");
-
-                //TODO això
-                var item = GetShopItemById(currencyId);
+                
+                var item = GetShopItemById(productId);
                 item.ActivateAnimation(false);
                 
-                statusText.Set("Tokens purchased.");
+                statusText.Set($"{currencyId} currency purchased.");
             });
         }
         catch (EconomyException e)

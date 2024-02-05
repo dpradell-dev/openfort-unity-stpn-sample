@@ -222,6 +222,12 @@ public class ShopController : BaseController, IDetailedStoreListener
                 }
                 
                 Debug.Log($"New balance: {task.Result.Balance}");
+
+                //TODO això
+                var item = GetShopItemById(currencyId);
+                item.ActivateAnimation(false);
+                
+                statusText.Set("Tokens purchased.");
             });
         }
         catch (EconomyException e)

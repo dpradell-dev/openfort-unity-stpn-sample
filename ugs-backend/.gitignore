@@ -1,0 +1,27 @@
+# .NET-specific
+*.exe.config
+*.dll.config
+*.svclog
+*.cache
+*.user
+*.suo
+*.nupkg
+*.dbmdl
+*.jfm
+*.VS
+*.bak.*
+*.bak.*
+*.userprefs
+_TestResults
+*AzureWebJobs*
+packages/
+
+# Common directories
+bin/
+obj/
+logs/
+publish/
+
+# JetBrains Rider and other JetBrains IDEs
+.idea/
+*.sln.DotSettings

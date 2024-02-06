@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class SwapView : MonoBehaviour
 {
     private SwapController _controller;
+
+    public TMP_InputField currencyInput;
     public TMP_InputField cryptoCurrencyInput;
 
     private void Start()
@@ -24,7 +24,7 @@ public class SwapView : MonoBehaviour
 
     private void OnDisable()
     {
-        cryptoCurrencyInput.text = string.Empty;
+        currencyInput.text = string.Empty;
     }
 
     public void OnCurrencyValueChanged_Handler(string currencyStringValue)

@@ -1,14 +1,10 @@
 using System;
 using Openfort.Model;
-using TMPro;
 using Unity.Services.CloudCode;
 using UnityEngine;
 
 public class InventoryController : BaseController
 {
-    [Header("UI")]
-    public TextMeshProUGUI balanceValue;
-    
     [Header("NFT related")]
     public Transform content;
     public NftPrefab nftPrefab;

@@ -19,6 +19,7 @@ public class CurrencyBalanceController : BaseController
         {
             Debug.Log($"The currency that was updated was {currencyID}");
             currencyBalanceText.text = await GetCurrencyBalance();
+            cryptoCurrencyBalanceText.text = await GetCryptoCurrencyBalance();
         };
         
         ActivateView(true);

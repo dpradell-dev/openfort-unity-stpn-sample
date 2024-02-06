@@ -1073,6 +1073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30c4fe2e732c754cbc480858224bd79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currencyInput: {fileID: 519761688}
   cryptoCurrencyInput: {fileID: 1685695540}
 --- !u!1 &262115553
 GameObject:
@@ -4404,7 +4405,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  createNewPlayer: 1
+  createNewPlayer: 0
   simulatePlayerCreation: 0
 --- !u!1 &1497380123
 GameObject:
@@ -7077,7 +7078,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewPanel: {fileID: 289931601}
   statusText: {fileID: 1874908716}
-  balanceValue: {fileID: 557592889}
   content: {fileID: 1596905199}
   nftPrefab: {fileID: 7640152571703931443, guid: bd007ad19d9c8f64187d43236efcee41, type: 3}
 --- !u!1001 &2584772214853826367

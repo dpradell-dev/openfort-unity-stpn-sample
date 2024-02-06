@@ -6,4 +6,5 @@ public static class GameConstants
     public const string BuyCryptoCurrencyCloudFunctionName = "TransferTokens";
 
     public const string UgsCurrencyId = "GOLD";
+    public const int CurrencySwapRate = 10;
 }

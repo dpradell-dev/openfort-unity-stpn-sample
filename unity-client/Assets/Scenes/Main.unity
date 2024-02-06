@@ -4404,7 +4404,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  createNewPlayer: 0
+  createNewPlayer: 1
   simulatePlayerCreation: 0
 --- !u!1 &1497380123
 GameObject:

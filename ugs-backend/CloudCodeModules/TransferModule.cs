@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using Nethereum.Hex.HexTypes;
 using Nethereum.Util;
 using Nethereum.Web3;
@@ -46,9 +47,17 @@ public class TransferModule: BaseModule
         CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, null, SingletonModule.OfDevAccount,
             SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});
 
-        var txResponse = await _ofClient.TransactionIntents.Create(request);
+        try
+        {
+            var txResponse = await _ofClient.TransactionIntents.Create(request);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         
-        await SendPlayerMessage(context, txResponse.Id, "TransferTokens");
+        await SendPlayerMessage(context, amount.ToString(CultureInfo.InvariantCulture), "TransferTokens");
     }
     
     private async Task<string> SendPlayerMessage(IExecutionContext context, string message, string messageType)

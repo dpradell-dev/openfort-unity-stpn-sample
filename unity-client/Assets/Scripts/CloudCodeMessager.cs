@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class CloudCodeMessager : Singleton<CloudCodeMessager>
 {
     public event UnityAction OnMintNftSuccessful;
-    public event UnityAction OnCryptoCurrencyPurchased;
+    public event UnityAction<int> OnCryptoCurrencyPurchased;
 
     public async void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
     {
@@ -27,9 +27,13 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
             switch (@event.MessageType)
             {
                 case GameConstants.BuyCryptoCurrencyCloudFunctionName:
-                    OnCryptoCurrencyPurchased?.Invoke();
+                    Debug.Log("OnCryptoCurrencyPurchased");
+                    // We send back the amount we purchased in string format. We need to parse it
+                    var amountPurchased = int.Parse(@event.Message);
+                    OnCryptoCurrencyPurchased?.Invoke(amountPurchased);
                     break;
                 case GameConstants.MintNftCloudFunctionName:
+                    Debug.Log("MintNftCloudFunctionName");
                     OnMintNftSuccessful?.Invoke();
                     break;
                 case null:

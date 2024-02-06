@@ -39,12 +39,12 @@ public class SwapView : MonoBehaviour
         }
 
         var currencyValue = int.Parse(currencyStringValue); // We know this is an Integer because it's set in the TMP_InputField
-        cryptoCurrencyInput.text = (currencyValue * 10).ToString();
+        cryptoCurrencyInput.text = (currencyValue * GameConstants.CurrencySwapRate).ToString();
     }
 
     public void OnBuyButtonClick_Handler()
     {
-        var balanceInt = int.Parse(cryptoCurrencyInput.text); // We know this is an Integer because it's set in the TMP_InputField
+        var balanceInt = int.Parse(cryptoCurrencyInput.text); // We know this is an Integer
         Debug.Log($"Buying crypto currency, amount: {balanceInt}");
         
         _controller.BuyCryptoCurrency(balanceInt);

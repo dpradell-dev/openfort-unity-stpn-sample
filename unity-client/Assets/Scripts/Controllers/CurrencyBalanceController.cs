@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Numerics;
 using Cysharp.Threading.Tasks;
 using Nethereum.Util;
@@ -42,6 +43,7 @@ public class CurrencyBalanceController : BaseController
 
             if (string.IsNullOrEmpty(balance))
             {
+                Debug.Log($"Crypto currency balance: {balance}");
                 return "0";
             }
             
@@ -50,12 +52,11 @@ public class CurrencyBalanceController : BaseController
             // Assuming decimals is the number of decimal places for the token
             int decimals = 18;
             // Convert to tokens using Nethereum
-            decimal amountInTokens = UnitConversion.Convert.FromWei(balanceInWei, decimals);
-                
-            // Format the decimal value with two decimal places
-            string formattedAmount = amountInTokens.ToString("0.00");
-
-            return formattedAmount;
+            decimal balanceInTokens = UnitConversion.Convert.FromWei(balanceInWei, decimals);
+            string formattedBalance = balanceInTokens.ToString(CultureInfo.InvariantCulture);
+            
+            Debug.Log($"Crypto currency balance: {formattedBalance}");
+            return formattedBalance;
         }
         catch (Exception e)
         {

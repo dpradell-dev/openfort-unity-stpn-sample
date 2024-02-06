@@ -207,30 +207,24 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region ECONOMY_METHODS
-    private void IncrementCurrency(string currencyId, int amount, string productId)
+    private async UniTaskVoid IncrementCurrency(string currencyId, int amount, string productId)
     {
         try
         {
-            var incrementBalanceTask = EconomyService.Instance.PlayerBalances.IncrementBalanceAsync(currencyId, amount);
+            // Await the asynchronous operation directly
+            var result = await EconomyService.Instance.PlayerBalances.IncrementBalanceAsync(currencyId, amount);
 
-            incrementBalanceTask.ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    // Handle the error
-                    Debug.LogError(task.Exception);
-                }
-                
-                Debug.Log($"New balance: {task.Result.Balance}");
-                
-                var item = GetShopItemById(productId);
-                item.ActivateAnimation(false);
-                
-                statusText.Set($"{currencyId} currency purchased.");
-            });
+            // Continue with the rest of the code after the await
+            Debug.Log($"New balance: {result.Balance}");
+
+            var item = GetShopItemById(productId);
+            item.ActivateAnimation(false);
+
+            statusText.Set($"{currencyId} currency purchased.");
         }
         catch (EconomyException e)
         {
+            // Handle the error
             Debug.LogError($"Failed to increment balance: {e.Message}");
         }
     }

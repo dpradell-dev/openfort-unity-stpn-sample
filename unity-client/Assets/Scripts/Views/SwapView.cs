@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,16 @@ public class SwapView : MonoBehaviour
 {
     public TMP_InputField cryptoCurrencyInput;
     public TMP_InputField currencyInput;
+
+    private void OnEnable()
+    {
+        CurrenciesController.Instance.OnCryptoCurrencyPurchased += CurrenciesController_OnCryptoCurrencyPurchased_Handler;
+    }
+
+    private void OnDisable()
+    {
+        CurrenciesController.Instance.OnCryptoCurrencyPurchased -= CurrenciesController_OnCryptoCurrencyPurchased_Handler;
+    }
 
     public void OnCurrencyValueChanged_Handler(string currencyStringValue)
     {
@@ -23,25 +34,29 @@ public class SwapView : MonoBehaviour
         cryptoCurrencyInput.text = (currencyValue * 10).ToString();
     }
 
-    public void BuyCryptoCurrency()
+    public async void BuyCryptoCurrency()
     {
-        
+        var balance = await CurrenciesController.Instance.GetCurrencyBalance();
+
+        if (string.IsNullOrEmpty(balance))
+        {
+            //TODO UI message
+            Debug.Log("Balance is null or empty.");
+            return;
+        }
+
+        var balanceInt = int.Parse(balance);
+        CurrenciesController.Instance.BuyCryptoCurrency(balanceInt);
     }
-    
-    /*
-    private async void TransferTokens(string productId, int amount)
-    {
-        statusText.Set("Transferring tokens...");
-        
-        var functionParams = new Dictionary<string, object> { {"purchasedProductId", productId}, {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, "TransferTokens", functionParams);
-        // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
-    }
-    */
 
     public void Close()
     {
         cryptoCurrencyInput.text = string.Empty;
         gameObject.SetActive(false);
+    }
+    
+    private void CurrenciesController_OnCryptoCurrencyPurchased_Handler()
+    {
+        Close();
     }
 }

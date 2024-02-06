@@ -14,6 +14,14 @@ public class StatusTextBehaviour : MonoBehaviour
         tmp.text = newText;
         StartCoroutine(ClearTextAfterDelay(10f)); // Start the coroutine
     }
+    
+    public void Set(string newText, float delay)
+    {
+        StopAllCoroutines();
+        
+        tmp.text = newText;
+        StartCoroutine(ClearTextAfterDelay(delay)); // Start the coroutine
+    }
 
     private IEnumerator ClearTextAfterDelay(float delay)
     {

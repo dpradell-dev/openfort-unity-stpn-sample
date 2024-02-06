@@ -28,7 +28,7 @@ public class TransferModule: BaseModule
     }
     
     [CloudCodeFunction("TransferTokens")]
-    public async Task TransferTokens(IExecutionContext context, string purchasedProductId, int amount)
+    public async Task TransferTokens(IExecutionContext context, decimal amount)
     {
         var currentOfPlayer = _singleton.CurrentOfPlayer;
         var currentOfAccount = _singleton.CurrentOfAccount;
@@ -38,17 +38,17 @@ public class TransferModule: BaseModule
             throw new Exception("No Openfort account found for the player.");
         }
         
-        //var weiAmount = UnitConversion.Convert.ToWei(amount);
+        var weiAmount = UnitConversion.Convert.ToWei(amount, 18);
         
         Interaction interaction =
-            new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{currentOfAccount.Address, amount});
+            new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{currentOfAccount.Id, weiAmount.ToString()});
         
         CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, null, SingletonModule.OfDevAccount,
             SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});
 
         var txResponse = await _ofClient.TransactionIntents.Create(request);
         
-        await SendPlayerMessage(context, txResponse.Id, purchasedProductId);
+        await SendPlayerMessage(context, txResponse.Id, "TransferTokens");
     }
     
     private async Task<string> SendPlayerMessage(IExecutionContext context, string message, string messageType)

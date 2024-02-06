@@ -55,22 +55,6 @@ public class InventoryController : BaseController
 
     public async void GetErc20Balance()
     {
-        try
-        {
-            var balance = await CloudCodeService.Instance.CallModuleEndpointAsync<string>(GameConstants.CurrentCloudModule, "GetErc20Balance");
-
-            if (string.IsNullOrEmpty(balance))
-            {
-            }
-            else
-            {
-                balanceValue.text = balance;
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        balanceValue.text = await CurrenciesController.Instance.GetCryptoCurrencyBalance();
     }
 }

@@ -22,7 +22,7 @@ public class MintingModule: BaseModule
     }
     
     [CloudCodeFunction("MintNFT")]
-    public async Task MintNFT(IExecutionContext context, string purchasedProductId)
+    public async Task MintNFT(IExecutionContext context)
     {
         // Code to mint NFT
         var currentOfPlayer = _singleton.CurrentOfPlayer;
@@ -41,7 +41,7 @@ public class MintingModule: BaseModule
 
         var txResponse = await _ofClient.TransactionIntents.Create(request);
 
-        await SendPlayerMessage(context, txResponse.Id, purchasedProductId);
+        await SendPlayerMessage(context, txResponse.Id, "MintNFT");
     }
     
     private async Task<string> SendPlayerMessage(IExecutionContext context, string message, string messageType)

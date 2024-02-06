@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
 using Openfort.Model;
 using Unity.Services.CloudCode;
-using Unity.Services.CloudCode.Subscriptions;
 using Unity.Services.Economy;
-using Unity.Services.Economy.Model;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
@@ -24,23 +21,41 @@ public class ShopController : BaseController, IDetailedStoreListener
     private void OnEnable()
     {
         ShopItem.OnPurchaseButtonClicked += ShopItem_OnPurchaseButtonClicked_Handler;
+        CloudCodeMessager.Instance.OnMintNftSuccessful += CloudCodeMessager_OnMintNftSuccessful_Handler;
     }
 
     private void OnDisable()
     {
         ShopItem.OnPurchaseButtonClicked -= ShopItem_OnPurchaseButtonClicked_Handler;
+        CloudCodeMessager.Instance.OnMintNftSuccessful -= CloudCodeMessager_OnMintNftSuccessful_Handler;
     }
 
     #region GAME_EVENT_HANDLERS
-    public async void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
+    public void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
     {
         InitializeIAP();
-        await SubscribeToCloudCodeMessages();
     }
     
     private void ShopItem_OnPurchaseButtonClicked_Handler(string shopItemId)
     {
         PurchaseItem(shopItemId);
+    }
+    
+    private void CloudCodeMessager_OnMintNftSuccessful_Handler()
+    {
+        // We want to get the Non Consumable item, which represents the NFT
+        try
+        {
+            var currentItem = GetShopItemByProductType(ProductType.NonConsumable);
+            currentItem.MarkAsPurchased(true);
+            
+            statusText.Set("NFT purchased.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
     #endregion
     
@@ -127,11 +142,11 @@ public class ShopController : BaseController, IDetailedStoreListener
             case ProductType.Consumable:
                 //TODO
                 #if UNITY_EDITOR
-                IncrementCurrency("GOLD", 20, productId);
+                IncrementCurrency(GameConstants.UgsCurrencyId, 20);
                 #endif 
                 break;
             case ProductType.NonConsumable:
-                MintNFT(productId);
+                MintNFT();
                 break;
             case ProductType.Subscription:
                 // Nothing
@@ -207,7 +222,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region ECONOMY_METHODS
-    private async UniTaskVoid IncrementCurrency(string currencyId, int amount, string productId)
+    private async UniTaskVoid IncrementCurrency(string currencyId, int amount)
     {
         try
         {
@@ -217,7 +232,8 @@ public class ShopController : BaseController, IDetailedStoreListener
             // Continue with the rest of the code after the await
             Debug.Log($"New balance: {result.Balance}");
 
-            var item = GetShopItemById(productId);
+            // We want to get the Consumable item which represents the currency tokens
+            var item = GetShopItemByProductType(ProductType.Consumable);
             item.ActivateAnimation(false);
 
             statusText.Set($"{currencyId} currency purchased.");
@@ -231,61 +247,12 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
     
     #region CLOUD_CODE_METHODS
-    private async void MintNFT(string productId)
+    private async void MintNFT()
     {
         statusText.Set("Minting NFT...");
         
-        var functionParams = new Dictionary<string, object> { {"purchasedProductId", productId} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, "MintNFT", functionParams);
+        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.MintNftCloudFunctionName);
         // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
-    }
-    
-    private Task SubscribeToCloudCodeMessages()
-    {
-        // Register callbacks, which are triggered when a player message is received
-        var callbacks = new SubscriptionEventCallbacks();
-        callbacks.MessageReceived += @event =>
-        {
-            var txId = @event.Message;
-            Debug.Log("Transaction ID: " + txId);
-            
-            // @event.messageType contains the iap product id that is being purchased
-            var currentItem = GetShopItemById(@event.MessageType);
-
-            //TODO at some point --> Now we are assuming all consumable products are related to transferring tokens, and all non-consumable to minting nfts.
-            switch (currentItem.productType)
-            {
-                case ProductType.Consumable:
-                    
-                    statusText.Set("Tokens purchased.");
-                    currentItem.ActivateAnimation(false);
-                    break;
-                
-                case ProductType.NonConsumable:
-                    
-                    statusText.Set("NFT purchased.");
-                    currentItem.MarkAsPurchased(true);
-                    break;
-                
-                case ProductType.Subscription:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        };
-        callbacks.ConnectionStateChanged += @event =>
-        {
-            Debug.Log($"Got player subscription ConnectionStateChanged: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-        };
-        callbacks.Kicked += () =>
-        {
-            Debug.Log($"Got player subscription Kicked");
-        };
-        callbacks.Error += @event =>
-        {
-            Debug.Log($"Got player subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-        };
-        return CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
     }
     #endregion
 
@@ -295,6 +262,20 @@ public class ShopController : BaseController, IDetailedStoreListener
         try
         {
             var selectedItem = _allItems.Find(item => item.id == id);
+            return selectedItem;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    private ShopItem GetShopItemByProductType(ProductType pType)
+    {
+        try
+        {
+            var selectedItem = _allItems.Find(item => item.productType == pType);
             return selectedItem;
         }
         catch (Exception e)

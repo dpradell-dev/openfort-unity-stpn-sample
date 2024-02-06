@@ -1,65 +1,38 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Numerics;
 using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
-using TMPro;
+using Nethereum.Util;
 using Unity.Services.CloudCode;
-using Unity.Services.CloudCode.Subscriptions;
 using Unity.Services.Economy;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class CurrenciesController : Singleton<CurrenciesController>
 {
-    public event UnityAction OnCryptoCurrencyPurchased;
-
     public StatusTextBehaviour statusText;
-    
-    public async void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
-    {
-        await SubscribeToCloudCodeMessages();
-    }
-
-    private Task SubscribeToCloudCodeMessages()
-    {
-        // Register callbacks, which are triggered when a player message is received
-        var callbacks = new SubscriptionEventCallbacks();
-        callbacks.MessageReceived += @event =>
-        {
-            var txId = @event.Message;
-            Debug.Log("Transaction ID: " + txId);
-            
-            //TODO
-            if (@event.MessageType == GameConstants.BuyCryptoCurrencyMessageType)
-            {
-                OnCryptoCurrencyPurchased?.Invoke();
-                statusText.Set("Crypto currency tokens purchased.");
-                
-                // TODO get crypto currency balance somewhere.
-            }
-        };
-        callbacks.ConnectionStateChanged += @event =>
-        {
-            Debug.Log($"Got player subscription ConnectionStateChanged: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-        };
-        callbacks.Kicked += () =>
-        {
-            Debug.Log($"Got player subscription Kicked");
-        };
-        callbacks.Error += @event =>
-        {
-            Debug.Log($"Got player subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-        };
-        return CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
-    }
     
     public async UniTask<string> GetCryptoCurrencyBalance()
     {
         try
         {
             var balance = await CloudCodeService.Instance.CallModuleEndpointAsync<string>(GameConstants.CurrentCloudModule, "GetErc20Balance");
-            return string.IsNullOrEmpty(balance) ? null : balance;
+
+            if (string.IsNullOrEmpty(balance))
+            {
+                return "0";
+            }
+            
+            // The amount in wei. Assuming it comes in wei
+            BigInteger balanceInWei = BigInteger.Parse(balance);
+            // Assuming decimals is the number of decimal places for the token
+            int decimals = 18;
+            // Convert to tokens using Nethereum
+            decimal amountInTokens = UnitConversion.Convert.FromWei(balanceInWei, decimals);
+                
+            // Format the decimal value with two decimal places
+            string formattedAmount = amountInTokens.ToString("0.00");
+
+            return formattedAmount;
         }
         catch (Exception e)
         {
@@ -68,12 +41,12 @@ public class CurrenciesController : Singleton<CurrenciesController>
         }
     }
     
-    public async void BuyCryptoCurrency(int amount)
+    public async void BuyCryptoCurrency(decimal amount)
     {
         //TODO statusText.Set("Transferring tokens...");
 
-        var functionParams = new Dictionary<string, object> { {"purchasedProductId", GameConstants.BuyCryptoCurrencyMessageType}, {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, "TransferTokens", functionParams);
+        var functionParams = new Dictionary<string, object> { {"amount", amount} };
+        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCurrencyCloudFunctionName, functionParams);
         // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
     }
     
@@ -86,9 +59,9 @@ public class CurrenciesController : Singleton<CurrenciesController>
             
             foreach (var balance in result.Balances)
             {
-                if (balance.CurrencyId == "GOLD")
+                if (balance.CurrencyId == GameConstants.UgsCurrencyId)
                 {
-                    Debug.Log($"The balance for GOLD is: {balance.Balance}");
+                    Debug.Log($"The balance for {GameConstants.UgsCurrencyId} is: {balance.Balance}");
                     return balance.Balance.ToString();
                 }
             }

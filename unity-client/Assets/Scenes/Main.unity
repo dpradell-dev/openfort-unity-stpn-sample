@@ -1028,7 +1028,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cryptoCurrencyInput: {fileID: 1685695540}
-  currencyInput: {fileID: 519761688}
 --- !u!1 &262115553
 GameObject:
   m_ObjectHideFlags: 0
@@ -4351,8 +4350,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 662691728}
-        m_TargetAssemblyTypeName: CurrenciesController, Assembly-CSharp
+      - m_Target: {fileID: 2011634771}
+        m_TargetAssemblyTypeName: CloudCodeMessager, Assembly-CSharp
         m_MethodName: AuthController_OnAuthSuccess_Handler
         m_Mode: 0
         m_Arguments:
@@ -6578,6 +6577,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011242717}
   m_CullTransparentMesh: 1
+--- !u!1 &2011634769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2011634770}
+  - component: {fileID: 2011634771}
+  m_Layer: 0
+  m_Name: CloudCodeMessager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2011634770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011634769}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2011634771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011634769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb61eb1c642d1014a89a1a19fdf58973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2014619680
 GameObject:
   m_ObjectHideFlags: 0
@@ -7097,6 +7140,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
+  - {fileID: 2011634770}
   - {fileID: 591311773}
   - {fileID: 2014619684}
   - {fileID: 1821017012}

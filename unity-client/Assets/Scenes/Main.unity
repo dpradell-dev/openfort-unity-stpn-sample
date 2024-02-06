@@ -462,6 +462,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67318272}
   m_CullTransparentMesh: 1
+--- !u!1 &70911050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70911051}
+  - component: {fileID: 70911052}
+  m_Layer: 0
+  m_Name: SwapController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &70911051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70911050}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 591311773}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70911052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70911050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab149cee7163354b91b6b87dd2ed671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewPanel: {fileID: 262031194}
+  statusText: {fileID: 1874908716}
 --- !u!1 &92914508
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +593,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 262031196}
         m_TargetAssemblyTypeName: SwapView, Assembly-CSharp
-        m_MethodName: BuyCryptoCurrency
+        m_MethodName: OnBuyButtonClick_Handler
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -782,7 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6862745}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.88235295}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1438,7 +1484,7 @@ GameObject:
   m_Component:
   - component: {fileID: 363032693}
   m_Layer: 5
-  m_Name: BalanceView
+  m_Name: CurrencyBalanceView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2053,9 +2099,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1485795432}
-  - {fileID: 262115554}
-  - {fileID: 2112743678}
   - {fileID: 662691727}
+  - {fileID: 262115554}
+  - {fileID: 70911051}
+  - {fileID: 2112743678}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &594443235
@@ -2270,7 +2317,7 @@ GameObject:
   - component: {fileID: 662691727}
   - component: {fileID: 662691728}
   m_Layer: 0
-  m_Name: CurrenciesController
+  m_Name: CurrencyBalanceController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2303,7 +2350,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51af1339cd9258b41929fa9e2fee2a89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewPanel: {fileID: 363032692}
   statusText: {fileID: 1874908716}
+  currencyBalanceText: {fileID: 1823886014}
+  cryptoCurrencyBalanceText: {fileID: 557592889}
 --- !u!1 &676275088
 GameObject:
   m_ObjectHideFlags: 0
@@ -2600,23 +2650,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 262031196}
+      objectReference: {fileID: 70911052}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Close
+      value: ActivateView
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SwapView, Assembly-CSharp
+      value: SwapController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8986778078849804520, guid: 6d6e6e690a5820a4a97763552486b8e5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4103,9 +4157,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 262031194}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 70911052}
+        m_TargetAssemblyTypeName: SwapController, Assembly-CSharp
+        m_MethodName: ActivateView
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4326,22 +4380,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2112743679}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: GetErc20Balance
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 363032692}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 2011634771}
+        m_TargetAssemblyTypeName: CloudCodeMessager, Assembly-CSharp
+        m_MethodName: AuthController_OnAuthSuccess_Handler
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4350,8 +4392,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 2011634771}
-        m_TargetAssemblyTypeName: CloudCodeMessager, Assembly-CSharp
+      - m_Target: {fileID: 662691728}
+        m_TargetAssemblyTypeName: CurrencyBalanceController, Assembly-CSharp
         m_MethodName: AuthController_OnAuthSuccess_Handler
         m_Mode: 0
         m_Arguments:

@@ -1,15 +1,38 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using Cysharp.Threading.Tasks;
 using Nethereum.Util;
+using TMPro;
 using Unity.Services.CloudCode;
 using Unity.Services.Economy;
 using UnityEngine;
 
-public class CurrenciesController : Singleton<CurrenciesController>
+public class CurrencyBalanceController : BaseController
 {
-    public StatusTextBehaviour statusText;
+    public TextMeshProUGUI currencyBalanceText;
+    public TextMeshProUGUI cryptoCurrencyBalanceText;
+    
+    public void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
+    {
+        EconomyService.Instance.PlayerBalances.BalanceUpdated += async currencyID => 
+        {
+            Debug.Log($"The currency that was updated was {currencyID}");
+            currencyBalanceText.text = await GetCurrencyBalance();
+        };
+        
+        ActivateView(true);
+    }
+
+    private async void ActivateView(bool activate)
+    {
+        viewPanel.SetActive(activate);
+
+        if (activate)
+        {
+            currencyBalanceText.text = await GetCurrencyBalance();
+            cryptoCurrencyBalanceText.text = await GetCryptoCurrencyBalance();
+        }
+    }
     
     public async UniTask<string> GetCryptoCurrencyBalance()
     {
@@ -39,15 +62,6 @@ public class CurrenciesController : Singleton<CurrenciesController>
             Console.WriteLine(e);
             throw;
         }
-    }
-    
-    public async void BuyCryptoCurrency(decimal amount)
-    {
-        //TODO statusText.Set("Transferring tokens...");
-
-        var functionParams = new Dictionary<string, object> { {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCurrencyCloudFunctionName, functionParams);
-        // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
     }
     
     public async UniTask<string> GetCurrencyBalance()

@@ -32,7 +32,12 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
                 case GameConstants.MintNftCloudFunctionName:
                     OnMintNftSuccessful?.Invoke();
                     break;
-                //TODO case null or empty
+                case null:
+                    Debug.LogError("Check this error");
+                    break;
+                case "":
+                    Debug.LogError("Check this error");
+                    break;
             }
         };
         callbacks.ConnectionStateChanged += @event =>

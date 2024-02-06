@@ -16,9 +16,7 @@ public class InventoryController : BaseController
     public void Activate()
     {
         viewPanel.SetActive(true);
-        
         GetPlayerNftInventory();
-        GetErc20Balance();
     }
 
     private async void GetPlayerNftInventory()
@@ -51,10 +49,5 @@ public class InventoryController : BaseController
             Console.WriteLine(e);
             throw;
         }
-    }
-
-    public async void GetErc20Balance()
-    {
-        balanceValue.text = await CurrenciesController.Instance.GetCryptoCurrencyBalance();
     }
 }

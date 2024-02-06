@@ -6,16 +6,25 @@ using UnityEngine;
 
 public class SwapView : MonoBehaviour
 {
+    private SwapController _controller;
     public TMP_InputField cryptoCurrencyInput;
 
-    private void OnEnable()
+    private void Start()
     {
-        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased += CloudCodeMessager_OnCryptoCurrencyPurchased_Handler;
+        try
+        {
+            _controller = FindObjectOfType<SwapController>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private void OnDisable()
     {
-        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased -= CloudCodeMessager_OnCryptoCurrencyPurchased_Handler;
+        cryptoCurrencyInput.text = string.Empty;
     }
 
     public void OnCurrencyValueChanged_Handler(string currencyStringValue)
@@ -33,22 +42,11 @@ public class SwapView : MonoBehaviour
         cryptoCurrencyInput.text = (currencyValue * 10).ToString();
     }
 
-    public void BuyCryptoCurrency()
+    public void OnBuyButtonClick_Handler()
     {
         var balanceInt = int.Parse(cryptoCurrencyInput.text); // We know this is an Integer because it's set in the TMP_InputField
         Debug.Log($"Buying crypto currency, amount: {balanceInt}");
         
-        CurrenciesController.Instance.BuyCryptoCurrency(balanceInt);
-    }
-
-    public void Close()
-    {
-        cryptoCurrencyInput.text = string.Empty;
-        gameObject.SetActive(false);
-    }
-    
-    private void CloudCodeMessager_OnCryptoCurrencyPurchased_Handler()
-    {
-        Close();
+        _controller.BuyCryptoCurrency(balanceInt);
     }
 }

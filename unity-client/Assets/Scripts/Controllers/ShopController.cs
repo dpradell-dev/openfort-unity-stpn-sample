@@ -140,9 +140,8 @@ public class ShopController : BaseController, IDetailedStoreListener
         switch (product.definition.type)
         {
             case ProductType.Consumable:
-                //TODO
                 #if UNITY_EDITOR
-                IncrementCurrency(GameConstants.UgsCurrencyId, 20);
+                BuyCurrency(GameConstants.UgsCurrencyId, 20);
                 #endif 
                 break;
             case ProductType.NonConsumable:
@@ -222,7 +221,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region ECONOMY_METHODS
-    private async UniTaskVoid IncrementCurrency(string currencyId, int amount)
+    private async UniTaskVoid BuyCurrency(string currencyId, int amount)
     {
         try
         {

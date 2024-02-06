@@ -182,7 +182,7 @@ public class ShopController : BaseController, IDetailedStoreListener
                         Debug.Log("No receipt.");
                         
                         // If we can not retrieve the receipt, we make sure if the nft is minted or not
-                        var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(CurrentCloudModule, "GetPlayerNftInventory");
+                        var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(GameConstants.CurrentCloudModule, "GetPlayerNftInventory");
 
                         if (inventoryList.Data.Count == 0)
                         {
@@ -228,35 +228,6 @@ public class ShopController : BaseController, IDetailedStoreListener
             Debug.LogError($"Failed to increment balance: {e.Message}");
         }
     }
-    
-    private void GetInGameCurrencyBalance()
-    {
-        // Call GetBalancesAsync with the options
-        var getBalancesTask = EconomyService.Instance.PlayerBalances.GetBalancesAsync();
-
-        getBalancesTask.ContinueWith(task =>
-        {
-            if (task.IsFaulted)
-            {
-                // Handle the error
-                Debug.LogError(task.Exception);
-            }
-            else
-            {
-                // Get the result and find the balance for the "GOLD" currency
-                var balancesResult = task.Result;
-                foreach (var balance in balancesResult.Balances)
-                {
-                    if (balance.CurrencyId == "GOLD")
-                    {
-                        Debug.Log($"The balance for GOLD is: {balance.Balance}");
-                        // Do something with the balance
-                    }
-                }
-            }
-        });
-    }
-
     #endregion
     
     #region CLOUD_CODE_METHODS
@@ -265,16 +236,7 @@ public class ShopController : BaseController, IDetailedStoreListener
         statusText.Set("Minting NFT...");
         
         var functionParams = new Dictionary<string, object> { {"purchasedProductId", productId} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(CurrentCloudModule, "MintNFT", functionParams);
-        // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
-    }
-
-    private async void TransferTokens(string productId, int amount)
-    {
-        statusText.Set("Transferring tokens...");
-        
-        var functionParams = new Dictionary<string, object> { {"purchasedProductId", productId}, {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(CurrentCloudModule, "TransferTokens", functionParams);
+        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, "MintNFT", functionParams);
         // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
     }
     

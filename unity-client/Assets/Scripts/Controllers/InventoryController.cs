@@ -27,7 +27,7 @@ public class InventoryController : BaseController
         
         try
         {
-            var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(CurrentCloudModule, "GetPlayerNftInventory");
+            var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(GameConstants.CurrentCloudModule, "GetPlayerNftInventory");
 
             if (inventoryList.Data.Count == 0)
             {
@@ -53,11 +53,11 @@ public class InventoryController : BaseController
         }
     }
 
-    private async void GetErc20Balance()
+    public async void GetErc20Balance()
     {
         try
         {
-            var balance = await CloudCodeService.Instance.CallModuleEndpointAsync<string>(CurrentCloudModule, "GetErc20Balance");
+            var balance = await CloudCodeService.Instance.CallModuleEndpointAsync<string>(GameConstants.CurrentCloudModule, "GetErc20Balance");
 
             if (string.IsNullOrEmpty(balance))
             {

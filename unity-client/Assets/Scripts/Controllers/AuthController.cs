@@ -66,7 +66,7 @@ public class AuthController : BaseController
                   statusText.Set("Creating Openfort player...");
                   // Call the function within the module and provide the parameters we defined in there
                   var functionParams = new Dictionary<string, object> {{"playerName", AuthenticationService.Instance.PlayerId}};
-                  var openfortPlayer = await CloudCodeService.Instance.CallModuleEndpointAsync<PlayerResponse>(CurrentCloudModule, "CreateOpenfortPlayer", functionParams);
+                  var openfortPlayer = await CloudCodeService.Instance.CallModuleEndpointAsync<PlayerResponse>(GameConstants.CurrentCloudModule, "CreateOpenfortPlayer", functionParams);
                   Debug.Log(openfortPlayer.Id);
                   
                   statusText.Set("Signed in successfully.");
@@ -81,7 +81,7 @@ public class AuthController : BaseController
           {
               statusText.Set("Setting current Openfort player data...");
               var functionParams = new Dictionary<string, object> { { "ofPlayerId", ofPlayerId } };
-              await CloudCodeService.Instance.CallModuleEndpointAsync(CurrentCloudModule, "SetOpenfortPlayerData",
+              await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, "SetOpenfortPlayerData",
                   functionParams);
               
               statusText.Set("Signed in successfully.");

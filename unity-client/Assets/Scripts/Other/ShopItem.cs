@@ -8,7 +8,9 @@ using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour
 {
-    public static event UnityAction<string> OnPurchaseButtonClicked;
+    public static event UnityAction<string> OnIapBuyButtonClicked;
+    public static event UnityAction<string, int> OnCurrencyBuyButtonClicked;
+    public static event UnityAction<string, float> OnCryptoBuyButtonClicked;
     
     private ProductCatalogItem _data;
     
@@ -21,9 +23,13 @@ public class ShopItem : MonoBehaviour
     [HideInInspector]
     public string price;
 
+    public AdvancedBuyPanel advancedBuyPanel;
+
     [Header("UI")]
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI priceText;
+    public Button iapBuyButton;
+    public Button generalBuyButton;
     public Image itemImage;
     public GameObject purchasedImg;
     public GameObject purchasingAnim;
@@ -44,15 +50,22 @@ public class ShopItem : MonoBehaviour
         
         // Set UI
         titleText.text = title;
-        priceText.text = price + "$";
+        priceText.text = price;
 
         switch (productType)
         {
             case ProductType.Consumable:
+                // In this demo, consumable products can only be bought with IAP
+                iapBuyButton.gameObject.SetActive(true);
                 itemImage.sprite = tokensSprite;
                 break;
             case ProductType.NonConsumable:
+                // In this demo, non consumable products can be bought with many options
+                generalBuyButton.gameObject.SetActive(true);
                 itemImage.sprite = nftSprite;
+                
+                // We also need to set up the UI of BuyNftPanel depending on price $
+                advancedBuyPanel.Setup(_data.googlePrice.value);
                 break;
             case ProductType.Subscription:
                 break;
@@ -61,9 +74,19 @@ public class ShopItem : MonoBehaviour
         }
     }
 
-    public void OnClick_Handler()
+    public void OnIapButtonClick_Handler()
     {
-        OnPurchaseButtonClicked?.Invoke(id);
+        OnIapBuyButtonClicked?.Invoke(id);
+    }
+    
+    public void OnCurrencyBuyButtonClicked_Handler()
+    {
+        OnCurrencyBuyButtonClicked?.Invoke(id, advancedBuyPanel.GetCurrencyPrice());
+    }
+    
+    public void OnCryptoBuyButtonClicked_Handler()
+    {
+        OnCryptoBuyButtonClicked?.Invoke(id, advancedBuyPanel.GetCryptoPrice());
     }
     
     public void MarkAsPurchased(bool status)

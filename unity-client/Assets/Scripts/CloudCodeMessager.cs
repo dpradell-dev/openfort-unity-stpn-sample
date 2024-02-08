@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Unity.Services.CloudCode;
@@ -9,41 +10,57 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
 {
     public event UnityAction OnMintNftSuccessful;
     public event UnityAction<int> OnCryptoCurrencyPurchased;
+    public event UnityAction<int> OnCryptoCurrencySpent;
 
     public async void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
     {
         await SubscribeToCloudCodeMessages();
     }
 
-    private Task SubscribeToCloudCodeMessages()
-    {
-        // Register callbacks, which are triggered when a player message is received
-        var callbacks = new SubscriptionEventCallbacks();
-        callbacks.MessageReceived += @event =>
-        {
-            var message = @event.Message;
-            Debug.Log("CloudCode player message received: " + message);
+    private bool _isCooldownActive = false;
+    private const float CooldownDuration = 3.0f; // Cooldown duration in seconds
 
-            switch (@event.MessageType)
+    private async Task SubscribeToCloudCodeMessages()
+    {
+        var callbacks = new SubscriptionEventCallbacks();
+        callbacks.MessageReceived += async @event =>
+        {
+            if (!_isCooldownActive)
             {
-                case GameConstants.BuyCryptoCurrencyCloudFunctionName:
-                    Debug.Log("OnCryptoCurrencyPurchased");
-                    // We send back the amount we purchased in string format. We need to parse it
-                    var amountPurchased = int.Parse(@event.Message);
-                    OnCryptoCurrencyPurchased?.Invoke(amountPurchased);
-                    break;
-                case GameConstants.MintNftCloudFunctionName:
-                    Debug.Log("MintNftCloudFunctionName");
-                    OnMintNftSuccessful?.Invoke();
-                    break;
-                case null:
-                    Debug.LogError("Check this error");
-                    break;
-                case "":
-                    Debug.LogError("Check this error");
-                    break;
+                var message = @event.Message;
+                Debug.Log("CloudCode player message received: " + message);
+
+                switch (@event.MessageType)
+                {
+                    case GameConstants.BuyCryptoCloudFunctionName:
+                        Debug.Log("OnCryptoCurrencyPurchased");
+                        var amountPurchased = int.Parse(@event.Message);
+                        OnCryptoCurrencyPurchased?.Invoke(amountPurchased);
+                        break;
+                    case GameConstants.SpendCryptoCloudFunctionName:
+                        Debug.Log("SpendCryptoCloudFunctionName");
+                        var amountSpent = int.Parse(@event.Message);
+                        OnCryptoCurrencySpent?.Invoke(amountSpent);
+                        break;
+                    case GameConstants.MintNftCloudFunctionName:
+                        Debug.Log("MintNftCloudFunctionName");
+                        OnMintNftSuccessful?.Invoke();
+                        break;
+                    case null:
+                        Debug.LogError("Check this error");
+                        break;
+                    case "":
+                        Debug.LogError("Check this error");
+                        break;
+                }
+
+                // Activate cooldown
+                _isCooldownActive = true;
+                await Task.Delay(TimeSpan.FromSeconds(CooldownDuration));
+                _isCooldownActive = false;
             }
         };
+
         callbacks.ConnectionStateChanged += @event =>
         {
             Debug.Log($"Got player subscription ConnectionStateChanged: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
@@ -55,9 +72,8 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
         callbacks.Error += @event =>
         {
             Debug.Log($"Got player subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-            
-            //TODO! Throw a generic error
         };
-        return CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
+
+        await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
     }
 }

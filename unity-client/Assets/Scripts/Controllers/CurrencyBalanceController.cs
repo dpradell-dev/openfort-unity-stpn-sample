@@ -19,7 +19,7 @@ public class CurrencyBalanceController : BaseController
         {
             Debug.Log($"The currency that was updated was {currencyID}");
             currencyBalanceText.text = await GetCurrencyBalance();
-            cryptoCurrencyBalanceText.text = await GetCryptoCurrencyBalance();
+            cryptoCurrencyBalanceText.text = await GetCryptoBalanceInString();
         };
         
         ActivateView(true);
@@ -32,11 +32,11 @@ public class CurrencyBalanceController : BaseController
         if (activate)
         {
             currencyBalanceText.text = await GetCurrencyBalance();
-            cryptoCurrencyBalanceText.text = await GetCryptoCurrencyBalance();
+            cryptoCurrencyBalanceText.text = await GetCryptoBalanceInString();
         }
     }
     
-    public async UniTask<string> GetCryptoCurrencyBalance()
+    public async UniTask<string> GetCryptoBalanceInString()
     {
         try
         {
@@ -45,6 +45,7 @@ public class CurrencyBalanceController : BaseController
             if (string.IsNullOrEmpty(balance))
             {
                 Debug.Log($"Crypto currency balance: {balance}");
+                cryptoCurrencyBalanceText.text = "0";
                 return "0";
             }
             
@@ -57,7 +58,37 @@ public class CurrencyBalanceController : BaseController
             string formattedBalance = balanceInTokens.ToString(CultureInfo.InvariantCulture);
             
             Debug.Log($"Crypto currency balance: {formattedBalance}");
+            cryptoCurrencyBalanceText.text = formattedBalance;
             return formattedBalance;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    public async UniTask<decimal> GetCryptoBalanceInDecimal()
+    {
+        try
+        {
+            var balance = await CloudCodeService.Instance.CallModuleEndpointAsync<string>(GameConstants.CurrentCloudModule, "GetErc20Balance");
+
+            if (string.IsNullOrEmpty(balance))
+            {
+                Debug.Log($"Crypto currency balance: {balance}");
+                return 0;
+            }
+            
+            // The amount in wei. Assuming it comes in wei
+            BigInteger balanceInWei = BigInteger.Parse(balance);
+            // Assuming decimals is the number of decimal places for the token
+            int decimals = 18;
+            // Convert to tokens using Nethereum
+            decimal balanceInTokens = UnitConversion.Convert.FromWei(balanceInWei, decimals);
+            
+            Debug.Log($"Crypto currency balance: {balanceInTokens}");
+            return balanceInTokens;
         }
         catch (Exception e)
         {

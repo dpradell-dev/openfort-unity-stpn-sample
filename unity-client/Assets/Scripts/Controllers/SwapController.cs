@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using Unity.Services.CloudCode;
 using Unity.Services.Economy;
 using UnityEngine;
-using UnityEngine.Purchasing;
 
 public class SwapController : BaseController
 {
@@ -28,7 +27,7 @@ public class SwapController : BaseController
         statusText.Set("Buying crypto currency...");
 
         var functionParams = new Dictionary<string, object> { {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCurrencyCloudFunctionName, functionParams);
+        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCloudFunctionName, functionParams);
         // Let's wait for the message from the backend coming through CloudCodeMessager
     }
     
@@ -55,7 +54,7 @@ public class SwapController : BaseController
         
         // Rate is 1:10 (Currency/CryptoCurrency)
         // TODO We should have this rate in the backend and retrieve it
-        DecreaseCurrencyBalance(amountPurchased / GameConstants.CurrencySwapRate);
+        DecreaseCurrencyBalance(amountPurchased / GameConstants.CurrencyToCryptoSwapRate);
         
         statusText.Set("Crypto currency purchased.", 3f);
         ActivateView(false);

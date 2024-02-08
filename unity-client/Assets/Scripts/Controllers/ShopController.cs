@@ -11,6 +11,20 @@ using UnityEngine.Purchasing.Extension;
 
 public class ShopController : BaseController, IDetailedStoreListener
 {
+    [Header("Controllers")]
+    public CurrencyBalanceController currencyBalanceController;
+    
+    private enum BuyType
+    {
+        IAP,
+        Currency,
+        Crypto
+    }
+
+    private BuyType _currentBuyType;
+    private int _currencyBuyPrice;
+    
+    [Header("Shop content and items")]
     public Transform content;
     public ShopItem shopItemPrefab;
     
@@ -20,14 +34,22 @@ public class ShopController : BaseController, IDetailedStoreListener
 
     private void OnEnable()
     {
-        ShopItem.OnPurchaseButtonClicked += ShopItem_OnPurchaseButtonClicked_Handler;
+        ShopItem.OnIapBuyButtonClicked += ShopItem_OnIapBuyButtonClicked_Handler;
+        ShopItem.OnCurrencyBuyButtonClicked += ShopItem_OnCurrencyBuyButtonClicked_Handler;
+        ShopItem.OnCryptoBuyButtonClicked += ShopItem_OnCryptoBuyButtonClicked_Handler;
+        
         CloudCodeMessager.Instance.OnMintNftSuccessful += CloudCodeMessager_OnMintNftSuccessful_Handler;
+        CloudCodeMessager.Instance.OnCryptoCurrencySpent += CloudCodeMessager_OnCryptoCurrencySpent_Handler;
     }
 
     private void OnDisable()
     {
-        ShopItem.OnPurchaseButtonClicked -= ShopItem_OnPurchaseButtonClicked_Handler;
+        ShopItem.OnIapBuyButtonClicked -= ShopItem_OnIapBuyButtonClicked_Handler;
+        ShopItem.OnCurrencyBuyButtonClicked -= ShopItem_OnCurrencyBuyButtonClicked_Handler;
+        ShopItem.OnCryptoBuyButtonClicked -= ShopItem_OnCryptoBuyButtonClicked_Handler;
+        
         CloudCodeMessager.Instance.OnMintNftSuccessful -= CloudCodeMessager_OnMintNftSuccessful_Handler;
+        CloudCodeMessager.Instance.OnCryptoCurrencySpent -= CloudCodeMessager_OnCryptoCurrencySpent_Handler;
     }
 
     #region GAME_EVENT_HANDLERS
@@ -36,26 +58,61 @@ public class ShopController : BaseController, IDetailedStoreListener
         InitializeIAP();
     }
     
-    private void ShopItem_OnPurchaseButtonClicked_Handler(string shopItemId)
+    private void ShopItem_OnIapBuyButtonClicked_Handler(string shopItemId)
     {
         PurchaseItem(shopItemId);
     }
     
-    private void CloudCodeMessager_OnMintNftSuccessful_Handler()
+    private async void ShopItem_OnCurrencyBuyButtonClicked_Handler(string shopItemId, int price)
     {
-        // We want to get the Non Consumable item, which represents the NFT
-        try
+        var product = _storeController.products.WithID(shopItemId);
+        if (product == null || !product.availableToPurchase)
         {
-            var currentItem = GetShopItemByProductType(ProductType.NonConsumable);
-            currentItem.MarkAsPurchased(true);
-            
-            statusText.Set("NFT purchased.");
+            statusText.Set("Product not available.", 2f);
+            return;
         }
-        catch (Exception e)
+        
+        var item = GetShopItemById(shopItemId);
+        item.ActivateAnimation(true);
+        
+        var currencyBalanceString = await currencyBalanceController.GetCurrencyBalance();
+        var currencyBalance = int.Parse(currencyBalanceString);
+
+        if (price > currencyBalance)
         {
-            Console.WriteLine(e);
-            throw;
+            statusText.Set("Not enough balance.", 3f);
+            item.ActivateAnimation(false);
+            return;
         }
+        
+        // We have enough balance so let's mint the NFT.
+        _currencyBuyPrice = price;
+        MintNft(BuyType.Currency);
+    }
+    
+    private async void ShopItem_OnCryptoBuyButtonClicked_Handler(string shopItemId, float price)
+    {
+        var product = _storeController.products.WithID(shopItemId);
+        if (product == null || !product.availableToPurchase)
+        {
+            statusText.Set("Product not available.", 2f);
+            return;
+        }
+        
+        var item = GetShopItemById(shopItemId);
+        
+        item.ActivateAnimation(true);
+        var cryptoBalance = await currencyBalanceController.GetCryptoBalanceInDecimal();
+
+        if (price > (double)cryptoBalance)
+        {
+            statusText.Set("Not enough balance.", 3f);
+            item = GetShopItemById(shopItemId);
+            item.ActivateAnimation(false);
+            return;
+        }
+        
+        SpendCryptoCurrency(BuyType.Crypto, (decimal)price);
     }
     #endregion
     
@@ -141,11 +198,13 @@ public class ShopController : BaseController, IDetailedStoreListener
         {
             case ProductType.Consumable:
                 #if UNITY_EDITOR
-                BuyCurrency(GameConstants.UgsCurrencyId, 20);
+                // Calculate currency amount to buy
+                var dollarPrice = Mathf.RoundToInt((float)product.metadata.localizedPrice);
+                BuyCurrency(GameConstants.UgsCurrencyId, dollarPrice * GameConstants.DollarToCurrencyRate);
                 #endif 
                 break;
             case ProductType.NonConsumable:
-                MintNFT();
+                MintNft(BuyType.IAP);
                 break;
             case ProductType.Subscription:
                 // Nothing
@@ -243,15 +302,87 @@ public class ShopController : BaseController, IDetailedStoreListener
             Debug.LogError($"Failed to increment balance: {e.Message}");
         }
     }
+    
+    private async UniTaskVoid DecreaseCurrencyBalance(int amount)
+    {
+        try
+        {
+            // Await the asynchronous operation directly
+            var result = await EconomyService.Instance.PlayerBalances.DecrementBalanceAsync(GameConstants.UgsCurrencyId, amount);
+
+            // Continue with the rest of the code after the await
+            Debug.Log($"New balance: {result.Balance}");
+        }
+        catch (EconomyException e)
+        {
+            // Handle the error
+            Debug.LogError($"Failed to increment balance: {e.Message}");
+        }
+    }
     #endregion
     
     #region CLOUD_CODE_METHODS
-    private async void MintNFT()
+    private async void MintNft(BuyType buyType)
     {
+        _currentBuyType = buyType;
         statusText.Set("Minting NFT...");
         
         await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.MintNftCloudFunctionName);
         // Let's wait for the message from backend --> Inside SubscribeToCloudCodeMessages()
+    }
+    
+    private async void SpendCryptoCurrency(BuyType buyType, decimal amount)
+    {
+        _currentBuyType = buyType;
+        statusText.Set("Spending crypto currency...");
+        
+        var functionParams = new Dictionary<string, object> { {"amount", amount} };
+        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.SpendCryptoCloudFunctionName, functionParams);
+        // Let's wait for the message from the backend coming through CloudCodeMessager
+    }
+    #endregion
+
+    #region CLOUD_CODE_CALLBACKS
+    private void CloudCodeMessager_OnMintNftSuccessful_Handler()
+    {
+        // We want to get the Non Consumable item, which represents the NFT
+        try
+        {
+            var currentItem = GetShopItemByProductType(ProductType.NonConsumable);
+            currentItem.MarkAsPurchased(true);
+
+            // Depending on how what BuyType we used to mint the NFT, we need to act accordingly:
+            switch (_currentBuyType)
+            {
+                case BuyType.IAP:
+                    // nothing
+                    break;
+                case BuyType.Currency:
+                    // Decrease currency balance
+                    Debug.Log($"Currency buy price is {_currencyBuyPrice}");
+                    DecreaseCurrencyBalance(_currencyBuyPrice);
+                    break;
+                case BuyType.Crypto:
+                    var newBalance = currencyBalanceController.GetCryptoBalanceInString();
+                    // TODO some log?
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            statusText.Set("NFT purchased.");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+    
+    private void CloudCodeMessager_OnCryptoCurrencySpent_Handler(int amountSpent)
+    {
+        // Now we mint the NFT
+        MintNft(BuyType.Crypto);
     }
     #endregion
 

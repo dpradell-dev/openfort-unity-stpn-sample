@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class SwapView : MonoBehaviour
 {
-    private SwapController _controller;
+    private SwapController _swapController;
+    private CurrencyBalanceController _currencyBalanceController;
 
     public TMP_InputField currencyInput;
     public TMP_InputField cryptoCurrencyInput;
+    public TextMeshProUGUI swapStatus;
 
     private void Start()
     {
         try
         {
-            _controller = FindObjectOfType<SwapController>();
+            _swapController = FindObjectOfType<SwapController>();
+            _currencyBalanceController = FindObjectOfType<CurrencyBalanceController>();
         }
         catch (Exception e)
         {
@@ -25,6 +28,7 @@ public class SwapView : MonoBehaviour
     private void OnDisable()
     {
         currencyInput.text = string.Empty;
+        swapStatus.text = string.Empty;
     }
 
     public void OnCurrencyValueChanged_Handler(string currencyStringValue)
@@ -39,14 +43,23 @@ public class SwapView : MonoBehaviour
         }
 
         var currencyValue = int.Parse(currencyStringValue); // We know this is an Integer because it's set in the TMP_InputField
-        cryptoCurrencyInput.text = (currencyValue * GameConstants.CurrencySwapRate).ToString();
+        cryptoCurrencyInput.text = (currencyValue * GameConstants.CurrencyToCryptoSwapRate).ToString();
     }
 
-    public void OnBuyButtonClick_Handler()
+    public async void OnBuyButtonClick_Handler()
     {
+        var currencySpendAmount = int.Parse(currencyInput.text);
+        var currentCurrencyBalance = await _currencyBalanceController.GetCurrencyBalance();
+
+        if (currencySpendAmount > int.Parse(currentCurrencyBalance))
+        {
+            swapStatus.text = "Not enough balance.";
+            return;
+        }
+        
         var balanceInt = int.Parse(cryptoCurrencyInput.text); // We know this is an Integer
         Debug.Log($"Buying crypto currency, amount: {balanceInt}");
         
-        _controller.BuyCryptoCurrency(balanceInt);
+        _swapController.BuyCryptoCurrency(balanceInt);
     }
 }

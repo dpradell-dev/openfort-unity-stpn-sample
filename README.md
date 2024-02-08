@@ -1,11 +1,11 @@
-# Openfort In-App Purchase Sample
+# Openfort In-App Purchase Advanced Sample
 
 <div align="center">
     <img
       width="100%"
       height="100%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_1_189cd9ce0f.png?updated_at=2023-12-26T18:47:08.290Z"
-      alt='Contract Info'
+      src="https://blog-cms.openfort.xyz/uploads/iap_sample_1_189cd9ce0f.png?updated_at=2023-12-26T18:47:08.290Z" //TODO
+      alt='Openfort In-App Purchase Advanced Sample'
     />
 </div>
 

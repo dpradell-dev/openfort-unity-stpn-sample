@@ -197,11 +197,11 @@ public class ShopController : BaseController, IDetailedStoreListener
         switch (product.definition.type)
         {
             case ProductType.Consumable:
-                #if UNITY_EDITOR
+                // #if UNITY_EDITOR
                 // Calculate currency amount to buy
                 var dollarPrice = Mathf.RoundToInt((float)product.metadata.localizedPrice);
                 BuyCurrency(GameConstants.UgsCurrencyId, dollarPrice * GameConstants.DollarToCurrencyRate);
-                #endif 
+                //#endif 
                 break;
             case ProductType.NonConsumable:
                 MintNft(BuyType.IAP);

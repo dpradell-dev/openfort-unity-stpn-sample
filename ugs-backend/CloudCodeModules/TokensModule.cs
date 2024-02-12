@@ -36,10 +36,12 @@ public class TokensModule: BaseModule
         
         var weiAmount = UnitConversion.Convert.ToWei(amount, 18);
         
+        //TODO check OfDevTreasuryAccount balance
+        
         Interaction interaction =
             new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{currentOfAccount.Id, weiAmount.ToString()});
         
-        CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, null, SingletonModule.OfDevAccount,
+        CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, null, SingletonModule.OfDevTreasuryAccount,
             SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});
 
         try
@@ -69,7 +71,7 @@ public class TokensModule: BaseModule
         var weiAmount = UnitConversion.Convert.ToWei(amount, 18);
         
         Interaction interaction =
-            new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{SingletonModule.OfDevAccount, weiAmount.ToString()});
+            new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{SingletonModule.OfDevTreasuryAccount, weiAmount.ToString()});
         
         CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, currentOfPlayer.Id, null,
             SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});

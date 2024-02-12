@@ -12,7 +12,8 @@ public class SingletonModule
     public const string OfNftContract = "con_dd370178-0cca-4888-a2a0-ea194a7415c7";
     public const string OfGoldContract = "con_289384bf-ff3d-4aed-b5b3-ada9cbd4650b";
     public const string OfSponsorPolicy = "pol_a43e5145-6db9-4351-a800-b5c473d5dc92";
-    public const string OfDevAccount = "dac_05a72f40-b2d6-4d91-9e40-880508527e03";
+    public const string OfDevTreasuryAccount = "dac_05a72f40-b2d6-4d91-9e40-880508527e03";
+    public const string OfDevMintingAccount = "dac_fcb38079-a918-406a-a968-672688c5fed1";
     
     public OpenfortClient OfClient { get; private set; }
     public int ChainId { get; } = 80001;

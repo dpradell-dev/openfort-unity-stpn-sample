@@ -3,6 +3,7 @@ public static class GameConstants
     public const string CurrentCloudModule = "CloudCodeModules";
 
     public const string MintNftCloudFunctionName = "MintNFT";
+    public const string SellNftCloudFunctionName = "SellNFT";
     public const string BuyCryptoCloudFunctionName = "TokensToPlayer";
     public const string SpendCryptoCloudFunctionName = "TokensToDevAccount";
 

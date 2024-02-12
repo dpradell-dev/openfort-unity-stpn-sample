@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class CloudCodeMessager : Singleton<CloudCodeMessager>
 {
     public event UnityAction OnMintNftSuccessful;
+    public event UnityAction<string> OnSellNftSuccessful;
     public event UnityAction<int> OnCryptoCurrencyPurchased;
     public event UnityAction<int> OnCryptoCurrencySpent;
 
@@ -45,6 +46,10 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
                     case GameConstants.MintNftCloudFunctionName:
                         Debug.Log("MintNftCloudFunctionName");
                         OnMintNftSuccessful?.Invoke();
+                        break;
+                    case GameConstants.SellNftCloudFunctionName:
+                        Debug.Log("SellNftCloudFunctionName");
+                        OnSellNftSuccessful?.Invoke(@event.Message);
                         break;
                     case null:
                         Debug.LogError("Check this error");

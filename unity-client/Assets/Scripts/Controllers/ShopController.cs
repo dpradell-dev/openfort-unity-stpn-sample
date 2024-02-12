@@ -14,6 +14,7 @@ public class ShopController : BaseController, IDetailedStoreListener
 {
     [Header("Controllers")]
     public CurrencyBalanceController currencyBalanceController;
+    public SwapController swapController;
     
     private enum BuyType
     {
@@ -24,6 +25,7 @@ public class ShopController : BaseController, IDetailedStoreListener
 
     private BuyType _currentBuyType;
     private int _currencyBuyPrice;
+    private decimal _currentMintPrice;
     
     [Header("Shop content and items")]
     public Transform content;
@@ -40,7 +42,9 @@ public class ShopController : BaseController, IDetailedStoreListener
         ShopItem.OnCryptoBuyButtonClicked += ShopItem_OnCryptoBuyButtonClicked_Handler;
         
         CloudCodeMessager.Instance.OnMintNftSuccessful += CloudCodeMessager_OnMintNftSuccessful_Handler;
+        CloudCodeMessager.Instance.OnSellNftSuccessful += CloudCodeMessager_OnSellNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnCryptoCurrencySpent += CloudCodeMessager_OnCryptoCurrencySpent_Handler;
+        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased += CloudCodeMessager_OnCryptoCurrencyReceived;
     }
 
     private void OnDisable()
@@ -50,7 +54,9 @@ public class ShopController : BaseController, IDetailedStoreListener
         ShopItem.OnCryptoBuyButtonClicked -= ShopItem_OnCryptoBuyButtonClicked_Handler;
         
         CloudCodeMessager.Instance.OnMintNftSuccessful -= CloudCodeMessager_OnMintNftSuccessful_Handler;
+        CloudCodeMessager.Instance.OnSellNftSuccessful -= CloudCodeMessager_OnSellNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnCryptoCurrencySpent -= CloudCodeMessager_OnCryptoCurrencySpent_Handler;
+        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased -= CloudCodeMessager_OnCryptoCurrencyReceived;
     }
 
     #region GAME_EVENT_HANDLERS
@@ -59,13 +65,16 @@ public class ShopController : BaseController, IDetailedStoreListener
         InitializeIAP();
     }
     
-    private void ShopItem_OnIapBuyButtonClicked_Handler(string shopItemId)
+    private void ShopItem_OnIapBuyButtonClicked_Handler(string shopItemId, float shopItemCryptoPrice)
     {
+        _currentMintPrice = (decimal)shopItemCryptoPrice; // We will need it later when we sell the nft
         PurchaseItem(shopItemId);
     }
     
-    private async void ShopItem_OnCurrencyBuyButtonClicked_Handler(string shopItemId, int price)
+    private async void ShopItem_OnCurrencyBuyButtonClicked_Handler(string shopItemId, int price, float shopItemCryptoPrice)
     {
+        _currentMintPrice = (decimal)shopItemCryptoPrice; // We will need it later when we sell the nft
+        
         var product = _storeController.products.WithID(shopItemId);
         if (product == null || !product.availableToPurchase)
         {
@@ -93,6 +102,8 @@ public class ShopController : BaseController, IDetailedStoreListener
     
     private async void ShopItem_OnCryptoBuyButtonClicked_Handler(string shopItemId, float price)
     {
+        _currentMintPrice = (decimal)price; // We will need it later when we sell the nft
+        
         var product = _storeController.products.WithID(shopItemId);
         if (product == null || !product.availableToPurchase)
         {
@@ -362,6 +373,33 @@ public class ShopController : BaseController, IDetailedStoreListener
         await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.SpendCryptoCloudFunctionName, functionParams);
         // Let's wait for the message from the backend coming through CloudCodeMessager
     }
+    
+    private async void ReceiveCryptoCurrency(decimal amount)
+    {
+        statusText.Set("Receiving crypto currency...");
+
+        try
+        {
+            var functionParams = new Dictionary<string, object> { {"amount", amount} };
+            await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCloudFunctionName, functionParams);
+            // Let's wait for the message from the backend coming through CloudCodeMessager
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("timeout"))
+            {
+                // Sometimes Cloud Code calls reach timeout as they're interacting with the blockchain (minting, transferring, etc.)
+                Debug.Log("timeout. keep waiting");
+            }
+            else
+            {
+                // It's a bad error
+                statusText.Set("Transaction failed.");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+    }
     #endregion
 
     #region CLOUD_CODE_CALLBACKS
@@ -404,10 +442,24 @@ public class ShopController : BaseController, IDetailedStoreListener
         }
     }
     
+    private void CloudCodeMessager_OnSellNftSuccessful_Handler(string soldTokenId)
+    {
+        Debug.Log($"Last mint nft price: {_currentMintPrice}");
+        
+        // receive crypto currency from Treasury
+        ReceiveCryptoCurrency(_currentMintPrice);
+    }
+    
     private void CloudCodeMessager_OnCryptoCurrencySpent_Handler(int amountSpent)
     {
         // Now we mint the NFT
         MintNft(BuyType.Crypto);
+    }
+    
+    private async void CloudCodeMessager_OnCryptoCurrencyReceived(int amount)
+    {
+        statusText.Set("Crypto currency received.");
+        await currencyBalanceController.GetCryptoBalanceInString();
     }
     #endregion
 

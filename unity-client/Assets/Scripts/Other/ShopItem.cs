@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class ShopItem : MonoBehaviour
 {
-    public static event UnityAction<string> OnIapBuyButtonClicked;
-    public static event UnityAction<string, int> OnCurrencyBuyButtonClicked;
+    public static event UnityAction<string, float> OnIapBuyButtonClicked;
+    public static event UnityAction<string, int, float> OnCurrencyBuyButtonClicked;
     public static event UnityAction<string, float> OnCryptoBuyButtonClicked;
     
     private ProductCatalogItem _data;
@@ -76,12 +76,12 @@ public class ShopItem : MonoBehaviour
 
     public void OnIapButtonClick_Handler()
     {
-        OnIapBuyButtonClicked?.Invoke(id);
+        OnIapBuyButtonClicked?.Invoke(id, advancedBuyPanel.GetCryptoPrice());
     }
     
     public void OnCurrencyBuyButtonClicked_Handler()
     {
-        OnCurrencyBuyButtonClicked?.Invoke(id, advancedBuyPanel.GetCurrencyPrice());
+        OnCurrencyBuyButtonClicked?.Invoke(id, advancedBuyPanel.GetCurrencyPrice(), advancedBuyPanel.GetCryptoPrice());
     }
     
     public void OnCryptoBuyButtonClicked_Handler()

@@ -1125,6 +1125,7 @@ MonoBehaviour:
   viewPanel: {fileID: 43346067}
   statusText: {fileID: 1874908716}
   currencyBalanceController: {fileID: 662691728}
+  swapController: {fileID: 70911052}
   content: {fileID: 114004902}
   shopItemPrefab: {fileID: 5114293543097888668, guid: c843b8d2c32ef7d4691b4f951690e9ef, type: 3}
 --- !u!1 &289931601
@@ -7228,6 +7229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewPanel: {fileID: 289931601}
   statusText: {fileID: 1874908716}
+  inventoryView: {fileID: 289931605}
   content: {fileID: 1596905199}
   nftPrefab: {fileID: 7640152571703931443, guid: bd007ad19d9c8f64187d43236efcee41, type: 3}
 --- !u!1001 &2584772214853826367

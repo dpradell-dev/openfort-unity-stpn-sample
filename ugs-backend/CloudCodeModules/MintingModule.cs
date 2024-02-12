@@ -44,8 +44,8 @@ public class MintingModule: BaseModule
         await SendPlayerMessage(context, txResponse.Id, "MintNFT");
     }
     
-    [CloudCodeFunction("NftToMintingAccount")]
-    public async Task NftToMintingAccount(IExecutionContext context, int tokenId)
+    [CloudCodeFunction("SellNFT")]
+    public async Task SellNFT(IExecutionContext context, int tokenId)
     {
         var currentOfPlayer = _singleton.CurrentOfPlayer;
         var currentOfAccount = _singleton.CurrentOfAccount;
@@ -68,10 +68,9 @@ public class MintingModule: BaseModule
         CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, currentOfPlayer.Id, null,
             SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});
         
-        TransactionIntentResponse txResponse;
         try
         {
-            txResponse = await _ofClient.TransactionIntents.Create(request);
+            var txResponse = await _ofClient.TransactionIntents.Create(request);
         }
         catch (Exception e)
         {
@@ -79,7 +78,7 @@ public class MintingModule: BaseModule
             throw;
         }
         
-        await SendPlayerMessage(context, txResponse.Id, "NftToMintingAccount");
+        await SendPlayerMessage(context, tokenId.ToString(), "SellNFT");
     }
     
     private async Task<string> SendPlayerMessage(IExecutionContext context, string message, string messageType)

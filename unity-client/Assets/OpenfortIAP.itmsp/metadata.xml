@@ -7,13 +7,13 @@
     <software_metadata>
       <in_app_purchases>
         <in_app_purchase>
-          <product_id>erc20</product_id>
-          <reference_name>erc20</reference_name>
+          <product_id>com.openfort.iapintegration.gold</product_id>
+          <reference_name>com.openfort.iapintegration.gold</reference_name>
           <type>consumable</type>
           <products>
             <product>
               <cleared_for_sale>true</cleared_for_sale>
-              <wholesale_price_tier>2</wholesale_price_tier>
+              <wholesale_price_tier>5</wholesale_price_tier>
             </product>
           </products>
           <locales>
@@ -23,14 +23,14 @@
             </locale>
           </locales>
           <review_screenshot>
-            <file_name>Screenshot 2024-02-09 at 15.48.13.png</file_name>
-            <size>51914</size>
-            <checksum>d2d881764be9be62618f7634c18e213c</checksum>
+            <file_name>gold.png</file_name>
+            <size>17120</size>
+            <checksum>01852cb9ac942983be73ac9badb9133e</checksum>
           </review_screenshot>
         </in_app_purchase>
         <in_app_purchase>
-          <product_id>erc721</product_id>
-          <reference_name>erc721</reference_name>
+          <product_id>com.openfort.iapintegration.erc721</product_id>
+          <reference_name>com.openfort.iapintegration.erc721</reference_name>
           <type>non-consumable</type>
           <products>
             <product>
@@ -45,9 +45,9 @@
             </locale>
           </locales>
           <review_screenshot>
-            <file_name>Screenshot 2024-02-09 at 15.43.59.png</file_name>
-            <size>47570</size>
-            <checksum>d2b9caa2318f56fb6790638aa7efc3dd</checksum>
+            <file_name>erc721.png</file_name>
+            <size>14857</size>
+            <checksum>2b135ac08627d444af60c6fc342e0316</checksum>
           </review_screenshot>
         </in_app_purchase>
       </in_app_purchases>

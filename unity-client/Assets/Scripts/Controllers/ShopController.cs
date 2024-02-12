@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Openfort.Model;
 using Unity.Services.CloudCode;
+using Unity.Services.CloudSave;
 using Unity.Services.Economy;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -207,6 +208,7 @@ public class ShopController : BaseController, IDetailedStoreListener
                 //#endif 
                 break;
             case ProductType.NonConsumable:
+                // Mint the NFT
                 MintNft(BuyType.IAP);
                 break;
             case ProductType.Subscription:
@@ -250,8 +252,22 @@ public class ShopController : BaseController, IDetailedStoreListener
                     if (nc.hasReceipt)
                     {
                         Debug.Log("Has receipt.");
-                        // Non-consumable item has already been purchased
-                        GetShopItemById(nc.definition.id).MarkAsPurchased(true);
+                        
+                        var txId = ExtractTxIdFromReceipt(nc.receipt);
+                        
+                        // Check with cloud save to see if it's the same txId
+                        var savedTxId = await CloudSaveHelper.LoadFromCloud(GameConstants.ReceiptTransactionIdKey);
+                        Debug.Log(savedTxId);
+
+                        if (txId == savedTxId)
+                        {
+                            // Non-consumable item has already been purchased
+                            GetShopItemById(nc.definition.id).MarkAsPurchased(true);
+                        }
+                        else
+                        {
+                            Debug.Log("Receipt tx ID's are not the same.");
+                        }
                     }
                     else
                     {
@@ -358,7 +374,10 @@ public class ShopController : BaseController, IDetailedStoreListener
             switch (_currentBuyType)
             {
                 case BuyType.IAP:
-                    // nothing
+                    // Save the product receipt txId to Unity player cloud data
+                    var product = _storeController.products.WithID(currentItem.id);
+                    var txId = ExtractTxIdFromReceipt(product.receipt);
+                    CloudSaveHelper.SaveToCloud(GameConstants.ReceiptTransactionIdKey, txId);
                     break;
                 case BuyType.Currency:
                     // Decrease currency balance
@@ -416,6 +435,19 @@ public class ShopController : BaseController, IDetailedStoreListener
             Console.WriteLine(e);
             throw;
         }
+    }
+    
+    private string ExtractTxIdFromReceipt(string receiptRaw)
+    {
+        var receipt = MiniJson.JsonDecode(receiptRaw) as Dictionary<string, object>;
+        if (receipt != null && receipt.TryGetValue(GameConstants.ReceiptTransactionIdKey, out object txId))
+        {
+            Debug.Log($"Transaction ID: {txId}");
+            return txId.ToString();
+        }
+        
+        Debug.LogError("Error: Transaction ID not found in receipt");
+        return null;
     }
     #endregion
 }

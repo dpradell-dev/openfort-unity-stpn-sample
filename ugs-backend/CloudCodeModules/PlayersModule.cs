@@ -75,6 +75,16 @@ public class PlayersModule: BaseModule
         return player;
     }
     
+    [CloudCodeFunction("SaveNftReceiptTxId")]
+    public async Task<PlayerResponse?> SaveNftReceiptTxId(IExecutionContext context, IGameApiClient gameApiClient, string txId)
+    {
+        // Now you can call SaveData with the context
+        await SavePlayerData(context, gameApiClient, "OpenfortPlayerId", player.Id);
+        await SavePlayerData(context, gameApiClient, "OpenfortAccountId", account.Id);
+        
+        return player;
+    }
+    
     private async Task SavePlayerData(IExecutionContext context, IGameApiClient gameApiClient, string key, object value)
     {
         try

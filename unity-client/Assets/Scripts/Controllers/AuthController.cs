@@ -57,7 +57,7 @@ public class AuthController : BaseController
           // Shows how to get an access token
           Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
 
-          var ofPlayerId = await LoadOpenfortPlayerId();
+          var ofPlayerId = await CloudSaveHelper.LoadFromCloud(GameConstants.OpenfortPlayerIdKey);
           
           if (string.IsNullOrEmpty(ofPlayerId))
           {

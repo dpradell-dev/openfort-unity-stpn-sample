@@ -70,7 +70,6 @@ public class SwapController : BaseController
     private void CloudCodeMessager_OnCryptoCurrencyPurchased_Handler(int amountPurchased)
     {
         // We successfully bought crypto currency so we need to decrease currency
-        
         // Rate is 1:10 (Currency/CryptoCurrency)
         // TODO We should have this rate in the backend and retrieve it
         DecreaseCurrencyBalance(amountPurchased / GameConstants.CurrencyToCryptoSwapRate);

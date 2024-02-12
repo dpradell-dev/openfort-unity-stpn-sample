@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwapView : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class SwapView : MonoBehaviour
     public TMP_InputField currencyInput;
     public TMP_InputField cryptoCurrencyInput;
     public TextMeshProUGUI swapStatus;
+
+    public Button buyButton;
+    public Button closeButton;
 
     private void Start()
     {
@@ -29,6 +33,8 @@ public class SwapView : MonoBehaviour
     {
         currencyInput.text = string.Empty;
         swapStatus.text = string.Empty;
+        
+        EnableButtons(true);
     }
 
     public void OnCurrencyValueChanged_Handler(string currencyStringValue)
@@ -60,6 +66,13 @@ public class SwapView : MonoBehaviour
         var balanceInt = int.Parse(cryptoCurrencyInput.text); // We know this is an Integer
         Debug.Log($"Buying crypto currency, amount: {balanceInt}");
         
+        EnableButtons(false);
         _swapController.BuyCryptoCurrency(balanceInt);
+    }
+
+    private void EnableButtons(bool enable)
+    {
+        buyButton.interactable = enable;
+        closeButton.interactable = enable;
     }
 }

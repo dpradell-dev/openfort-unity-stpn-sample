@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Services.CloudCode;
@@ -26,9 +26,28 @@ public class SwapController : BaseController
     {
         statusText.Set("Buying crypto currency...");
 
-        var functionParams = new Dictionary<string, object> { {"amount", amount} };
-        await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCloudFunctionName, functionParams);
-        // Let's wait for the message from the backend coming through CloudCodeMessager
+        try
+        {
+            var functionParams = new Dictionary<string, object> { {"amount", amount} };
+            await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCloudFunctionName, functionParams);
+            // Let's wait for the message from the backend coming through CloudCodeMessager
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("timeout"))
+            {
+                // Sometimes Cloud Code calls reach timeout as they're interacting with the blockchain (minting, transferring, etc.)
+                Debug.Log("timeout. keep waiting");
+            }
+            else
+            {
+                // It's a bad error
+                ActivateView(false);  
+                statusText.Set("Transaction failed.");
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
     
     private async UniTaskVoid DecreaseCurrencyBalance(int amount)

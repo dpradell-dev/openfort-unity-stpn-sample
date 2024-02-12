@@ -4,14 +4,20 @@
     <img
       width="100%"
       height="100%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_1_189cd9ce0f.png?updated_at=2023-12-26T18:47:08.290Z" //TODO
+      src="https://blog-cms.openfort.xyz/uploads/unity_advanced_iap_212548bbe7.jpg?updated_at=2024-02-09T10:40:14.394Z"
       alt='Openfort In-App Purchase Advanced Sample'
     />
 </div>
 
 ## Overview
 
-This sample project showcases the Openfort integration with [In-App Purchasing](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Overview.html) in Unity.
+This sample project showcases the Openfort advanced integration with [In-App Purchasing](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Overview.html) in Unity. The objective of this integration sample is to implement and showcase a **crypto In-App Purchasing system** compliant with the [rules/guidelines](https://brandonaaskov.notion.site/The-Apple-Pay-Flow-10ea358d903444298513ac42b1f383d8) companies like Apple have set for this type of purchases in mobile apps.
+
+## Workflow
+
+// TODO image
+
+## Specifications
 
 The sample includes:
   - [**`ugs-backend`**](https://github.com/openfort-xyz/iap-unity-sample/tree/main/ugs-backend)
@@ -21,17 +27,6 @@ The sample includes:
   - [**`unity-client`**](https://github.com/openfort-xyz/iap-unity-sample/tree/main/unity-client)
 
     A Unity sample game that connects to ``ugs-backend`` through [Cloud Code](https://docs.unity.com/ugs/manual/cloud-code/manual). It uses [Openfort Unity SDK](https://github.com/openfort-xyz/openfort-csharp-unity) to have full compatibility with `ugs-backend` responses.
-
-## Workflow
-
-1. [Sign in as a new anonymous player](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/AuthController.cs#L44)
-2. [Create an Openfort player](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/PlayersModule.cs#L59) and a [custodial account](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/PlayersModule.cs#L66)
-3. [Save the Openfort player's information](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/PlayersModule.cs#L72) to the Unity player's dashboard
-4. [Initialize Unity In-App Purchasing service](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/ShopController.cs#L44)
-5. Now the player can [purchase a consumable or a non-consumable in-app product](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/ShopController.cs#L74)
-6. [If the consumable purchase is successful](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/ShopController.cs#L124), some [ERC20 tokens will be transferred](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/TransferModule.cs#L31) to its account
-7. [If the non-consumable purchase is successful](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/ShopController.cs#L127), the player will [mint an NFT](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/MintingModule.cs#L25)
-8. The player can also [retrieve their ERC20 token balance](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/InventoryController.cs#L56) and [NFT inventory](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/Scripts/Controllers/InventoryController.cs#L24)
 
 ## Prerequisites
 + **Get started with Openfort**
@@ -43,6 +38,10 @@ The sample includes:
 
 + **Get started with Google Play Console**
   + [Create and set up your app](https://support.google.com/googleplay/android-developer/answer/9859152?hl=en)
+
++ **Get started with Apple Developer Account**
+  + [Set up everything needed for Apple development](https://developer.apple.com/help/account/)
+  + Make sure to [sign the Paid Apps agreement](https://developer.apple.com/help/app-store-connect/manage-agreements/sign-and-update-agreements) as it's needed for testing IAP.
 
 ## Setup Openfort dashboard
   
@@ -402,11 +401,15 @@ Once the internal testing release is published, you have two options to test:
       />
   </div>
 
+## Set up AppStore Connect
+
+
+
 ## Conclusion
 
 Upon completing the above steps, your Unity game will be fully integrated with Openfort and Unity In-App Purchasing service. Always remember to test every feature before deploying to guarantee a flawless player experience.
 
-For a deeper understanding of the underlying processes, check out the [tutorial video](https://www.youtube.com/watch?v=8Pw4VUyWVY8). 
+For a deeper understanding of the underlying processes, check out the [tutorial video](//TODO). 
 
 ## Get support
 If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](https://github.com/openfort-xyz/samples/issues)).

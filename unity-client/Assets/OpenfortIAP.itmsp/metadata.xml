@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package version="software5.7" xmlns="http://apple.com/itunes/importer">
+  <provider>FNCNQMZQA3</provider>
+  <team_id>FNCNQMZQA3</team_id>
+  <software>
+    <vendor_id>OpenfortIAP</vendor_id>
+    <software_metadata>
+      <in_app_purchases>
+        <in_app_purchase>
+          <product_id>erc20</product_id>
+          <reference_name>erc20</reference_name>
+          <type>consumable</type>
+          <products>
+            <product>
+              <cleared_for_sale>true</cleared_for_sale>
+              <wholesale_price_tier>2</wholesale_price_tier>
+            </product>
+          </products>
+          <locales>
+            <locale name="en-US">
+              <title>Gold</title>
+              <description>Gold virtual currency</description>
+            </locale>
+          </locales>
+          <review_screenshot>
+            <file_name>Screenshot 2024-02-09 at 15.48.13.png</file_name>
+            <size>51914</size>
+            <checksum>d2d881764be9be62618f7634c18e213c</checksum>
+          </review_screenshot>
+        </in_app_purchase>
+        <in_app_purchase>
+          <product_id>erc721</product_id>
+          <reference_name>erc721</reference_name>
+          <type>non-consumable</type>
+          <products>
+            <product>
+              <cleared_for_sale>true</cleared_for_sale>
+              <wholesale_price_tier>5</wholesale_price_tier>
+            </product>
+          </products>
+          <locales>
+            <locale name="en-US">
+              <title>ERC721</title>
+              <description>A simple NFT</description>
+            </locale>
+          </locales>
+          <review_screenshot>
+            <file_name>Screenshot 2024-02-09 at 15.43.59.png</file_name>
+            <size>47570</size>
+            <checksum>d2b9caa2318f56fb6790638aa7efc3dd</checksum>
+          </review_screenshot>
+        </in_app_purchase>
+      </in_app_purchases>
+    </software_metadata>
+  </software>
+</package>

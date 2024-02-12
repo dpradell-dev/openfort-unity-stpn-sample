@@ -122,8 +122,10 @@ public class ShopController : BaseController, IDetailedStoreListener
         StandardPurchasingModule.Instance().useFakeStoreUIMode = FakeStoreUIMode.StandardUser;
         StandardPurchasingModule.Instance().useFakeStoreAlways = true;
 #endif
+
         // Configure builder
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+
         // Load catalog
         var catalog = ProductCatalog.LoadDefaultCatalog();
 
@@ -136,6 +138,7 @@ public class ShopController : BaseController, IDetailedStoreListener
 
             // Add product to builder
             builder.AddProduct(product.id, product.type);
+            Debug.Log("IAP product: " + product.id);
             
             // Instantiate shop item with product data
             var intantiatedItem = Instantiate(shopItemPrefab, content);

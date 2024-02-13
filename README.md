@@ -99,6 +99,7 @@ The sample includes:
     />
     </div>
 
+    //TODO add two developer accounts
   + [Add a Developer Account](https://dashboard.openfort.xyz/accounts)
 
     Enter a name and choose ***Add account***:
@@ -120,6 +121,7 @@ The sample includes:
 
   Open the [solution](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules.sln) with your preferred IDE, open [``SingletonModule.cs``](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/SingletonModule.cs) and fill in these variables:
 
+  //TODO
   <div align="center">
     <img
       width="50%"
@@ -134,6 +136,7 @@ The sample includes:
   - `OfGoldContract`: [Retrieve the **ERC20 contract API ID**](https://dashboard.openfort.xyz/assets)
   - `OfSponsorPolicy`: [Retrieve the **Policy API ID**](https://dashboard.openfort.xyz/policies)
   - `OfDevAccount`: [Retrieve the **Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
+  - `TODO`: [Retrieve the **Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
 
 - ### Package Code
   Follow [the official documentation steps](https://docs.unity.com/ugs/en-us/manual/cloud-code/manual/modules/getting-started#Package_code).

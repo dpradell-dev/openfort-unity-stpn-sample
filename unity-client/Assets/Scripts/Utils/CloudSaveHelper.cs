@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Services.CloudSave;
@@ -36,8 +37,15 @@ public class CloudSaveHelper : MonoBehaviour
     
     public static async UniTask DeleteFromCloud(string key)
     {
-        await CloudSaveService.Instance.Data.Player.DeleteAsync(key, new DeleteOptions());
-        
-        Debug.Log($"Data deleted with key: {key}");
+        try
+        {
+            await CloudSaveService.Instance.Data.Player.DeleteAsync(key, new DeleteOptions());
+            Debug.Log($"Data deleted with key: {key}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            Console.WriteLine("An error occurred while trying to delete data from the cloud. But the program will continue running.");
+        }
     }
 }

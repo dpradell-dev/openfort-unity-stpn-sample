@@ -259,16 +259,22 @@ public class ShopController : BaseController, IDetailedStoreListener
             var nonConsumables = _storeController.products;
             foreach (var nc in nonConsumables.all)
             {
-                // TO-IMPROVE: if there's any nft in the player's inventory, we now mark ANY in-app non-consumable product as purchased.
-                // We could link the in-app NC product with the NFT somehow
                 if (nc.definition.type == ProductType.NonConsumable)
                 {
+                    var containsNft = await CheckPlayerInventory();
+                    if (containsNft)
+                    {
+                        // Non-consumable item has already been purchased
+                        GetShopItemById(nc.definition.id).MarkAsPurchased(true);
+                        return;
+                    }
+                    
                     if (nc.hasReceipt)
                     {
                         Debug.Log("Has receipt.");
-                        
+                    
                         var txId = ExtractTxIdFromReceipt(nc.receipt);
-                        
+                    
                         // Check with cloud save to see if it's the same txId
                         var savedTxId = await CloudSaveHelper.LoadFromCloud(GameConstants.ReceiptTransactionIdKey);
                         Debug.Log(savedTxId);
@@ -281,24 +287,8 @@ public class ShopController : BaseController, IDetailedStoreListener
                         else
                         {
                             Debug.Log("Receipt tx ID's are not the same.");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("No receipt.");
-                        
-                        // If we can not retrieve the receipt, we make sure if the nft is minted or not
-                        var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(GameConstants.CurrentCloudModule, "GetPlayerNftInventory");
-
-                        if (inventoryList.Data.Count == 0)
-                        {
-                            // Non-consumable item has not been purchased
+                            // It's not the product receipt of this player.
                             GetShopItemById(nc.definition.id).MarkAsPurchased(false);
-                        }
-                        else
-                        {
-                            // Non-consumable item has already been purchased
-                            GetShopItemById(nc.definition.id).MarkAsPurchased(true);
                         }
                     }
                 }
@@ -446,9 +436,8 @@ public class ShopController : BaseController, IDetailedStoreListener
     {
         Debug.Log($"Last mint nft price: {_currentMintPrice}");
         
-        statusText.Set("Receiving tokenssss");
-        
-        await UniTask.Delay(100);
+        // We can remove ReceiptTxId from cloud save
+        await CloudSaveHelper.DeleteFromCloud(GameConstants.ReceiptTransactionIdKey);
         
         // receive crypto currency from Treasury
         await ReceiveCryptoCurrency(_currentMintPrice);
@@ -494,6 +483,18 @@ public class ShopController : BaseController, IDetailedStoreListener
             Console.WriteLine(e);
             throw;
         }
+    }
+
+    private async UniTask<bool> CheckPlayerInventory()
+    {
+        var inventoryList = await CloudCodeService.Instance.CallModuleEndpointAsync<InventoryListResponse>(GameConstants.CurrentCloudModule, "GetPlayerNftInventory");
+        
+        if (inventoryList.Data.Count == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
     
     private string ExtractTxIdFromReceipt(string receiptRaw)

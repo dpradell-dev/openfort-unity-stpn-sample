@@ -94,7 +94,7 @@ public class InventoryController : BaseController
     
     private void CloudCodeMessager_OnSellNftSuccessful_Handler(string soldTokenId)
     {
-        statusText.Set("NFT sold successfully.");
+        statusText.Set("NFT sold successfully.", 5f);
         inventoryView.ClearItem(soldTokenId);
     }
     

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.Services.CloudSave;
 using UnityEngine;
+using DeleteOptions = Unity.Services.CloudSave.Models.Data.Player.DeleteOptions;
 
 public class CloudSaveHelper : MonoBehaviour
 {
@@ -31,5 +32,12 @@ public class CloudSaveHelper : MonoBehaviour
         
         Debug.Log($"No data found for the key: {key}");
         return null;
+    }
+    
+    public static async UniTask DeleteFromCloud(string key)
+    {
+        await CloudSaveService.Instance.Data.Player.DeleteAsync(key, new DeleteOptions());
+        
+        Debug.Log($"Data deleted with key: {key}");
     }
 }

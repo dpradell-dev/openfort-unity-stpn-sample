@@ -44,7 +44,7 @@ public class ShopController : BaseController, IDetailedStoreListener
         CloudCodeMessager.Instance.OnMintNftSuccessful += CloudCodeMessager_OnMintNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnSellNftSuccessful += CloudCodeMessager_OnSellNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnCryptoCurrencySpent += CloudCodeMessager_OnCryptoCurrencySpent_Handler;
-        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased += CloudCodeMessager_OnCryptoCurrencyReceived;
+        CloudCodeMessager.Instance.OnCryptoCurrencyReceived += CloudCodeMessager_OnCryptoCurrencyReceived;
     }
 
     private void OnDisable()
@@ -56,7 +56,7 @@ public class ShopController : BaseController, IDetailedStoreListener
         CloudCodeMessager.Instance.OnMintNftSuccessful -= CloudCodeMessager_OnMintNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnSellNftSuccessful -= CloudCodeMessager_OnSellNftSuccessful_Handler;
         CloudCodeMessager.Instance.OnCryptoCurrencySpent -= CloudCodeMessager_OnCryptoCurrencySpent_Handler;
-        CloudCodeMessager.Instance.OnCryptoCurrencyPurchased -= CloudCodeMessager_OnCryptoCurrencyReceived;
+        CloudCodeMessager.Instance.OnCryptoCurrencyReceived -= CloudCodeMessager_OnCryptoCurrencyReceived;
     }
 
     #region GAME_EVENT_HANDLERS
@@ -374,14 +374,14 @@ public class ShopController : BaseController, IDetailedStoreListener
         // Let's wait for the message from the backend coming through CloudCodeMessager
     }
     
-    private async void ReceiveCryptoCurrency(decimal amount)
+    private async UniTask ReceiveCryptoCurrency(decimal amount)
     {
         statusText.Set("Receiving crypto currency...");
 
         try
         {
             var functionParams = new Dictionary<string, object> { {"amount", amount} };
-            await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.BuyCryptoCloudFunctionName, functionParams);
+            await CloudCodeService.Instance.CallModuleEndpointAsync(GameConstants.CurrentCloudModule, GameConstants.ReceiveCryptoCloudFunctionName, functionParams);
             // Let's wait for the message from the backend coming through CloudCodeMessager
         }
         catch (Exception e)
@@ -442,12 +442,16 @@ public class ShopController : BaseController, IDetailedStoreListener
         }
     }
     
-    private void CloudCodeMessager_OnSellNftSuccessful_Handler(string soldTokenId)
+    private async void CloudCodeMessager_OnSellNftSuccessful_Handler(string soldTokenId)
     {
         Debug.Log($"Last mint nft price: {_currentMintPrice}");
         
+        statusText.Set("Receiving tokenssss");
+        
+        await UniTask.Delay(100);
+        
         // receive crypto currency from Treasury
-        ReceiveCryptoCurrency(_currentMintPrice);
+        await ReceiveCryptoCurrency(_currentMintPrice);
     }
     
     private void CloudCodeMessager_OnCryptoCurrencySpent_Handler(int amountSpent)

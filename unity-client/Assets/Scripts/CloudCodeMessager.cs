@@ -11,6 +11,7 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
     public event UnityAction OnMintNftSuccessful;
     public event UnityAction<string> OnSellNftSuccessful;
     public event UnityAction<int> OnCryptoCurrencyPurchased;
+    public event UnityAction<int> OnCryptoCurrencyReceived;
     public event UnityAction<int> OnCryptoCurrencySpent;
 
     public async void AuthController_OnAuthSuccess_Handler(string ofPlayerId)
@@ -50,6 +51,11 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
                     case GameConstants.SellNftCloudFunctionName:
                         Debug.Log("SellNftCloudFunctionName");
                         OnSellNftSuccessful?.Invoke(@event.Message);
+                        break;
+                    case GameConstants.ReceiveCryptoCloudFunctionName:
+                        Debug.Log("ReceiveCryptoCloudFunctionName");
+                        var amountReceived = int.Parse(@event.Message);
+                        OnCryptoCurrencyReceived?.Invoke(amountReceived);
                         break;
                     case null:
                         Debug.LogError("Check this error");

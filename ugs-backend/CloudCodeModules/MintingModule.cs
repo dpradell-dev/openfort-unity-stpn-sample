@@ -1,4 +1,6 @@
-﻿using Openfort.SDK;
+﻿using System.Globalization;
+using Nethereum.Util;
+using Openfort.SDK;
 using Openfort.SDK.Model;
 using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
@@ -79,6 +81,40 @@ public class MintingModule: BaseModule
         }
         
         await SendPlayerMessage(context, tokenId.ToString(), "SellNFT");
+    }
+    
+    [CloudCodeFunction("TokensToPlayerAfterNftSale")]
+    public async Task TokensToPlayerAfterNftSale(IExecutionContext context, decimal amount)
+    {
+        var currentOfPlayer = _singleton.CurrentOfPlayer;
+        var currentOfAccount = _singleton.CurrentOfAccount;
+
+        if (currentOfPlayer == null || currentOfAccount == null)
+        {
+            throw new Exception("No Openfort account found for the player.");
+        }
+        
+        var weiAmount = UnitConversion.Convert.ToWei(amount, 18);
+        
+        //TODO check OfDevTreasuryAccount balance
+        
+        Interaction interaction =
+            new Interaction(null,null, SingletonModule.OfGoldContract, "transfer", new List<object>{currentOfAccount.Id, weiAmount.ToString()});
+        
+        CreateTransactionIntentRequest request = new CreateTransactionIntentRequest(_chainId, null, SingletonModule.OfDevTreasuryAccount,
+            SingletonModule.OfSponsorPolicy, null, false, 0, new List<Interaction>{interaction});
+
+        try
+        {
+            var txResponse = await _ofClient.TransactionIntents.Create(request);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
+        await SendPlayerMessage(context, amount.ToString(CultureInfo.InvariantCulture), "TokensToPlayerAfterNftSale");
     }
     
     private async Task<string> SendPlayerMessage(IExecutionContext context, string message, string messageType)

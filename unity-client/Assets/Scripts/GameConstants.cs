@@ -6,6 +6,7 @@ public static class GameConstants
     public const string SellNftCloudFunctionName = "SellNFT";
     public const string BuyCryptoCloudFunctionName = "TokensToPlayer";
     public const string SpendCryptoCloudFunctionName = "TokensToDevAccount";
+    public const string ReceiveCryptoCloudFunctionName = "TokensToPlayerAfterNftSale";
 
     public const string UgsCurrencyId = "GOLD";
     public const int DollarToCurrencyRate = 10; 

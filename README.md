@@ -9,8 +9,6 @@
     />
 </div>
 
-## [Try it live!]()
-
 ## Overview
 
 This sample project showcases the Openfort advanced integration with [In-App Purchasing](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Overview.html) in Unity. The objective of this integration sample is to implement and showcase a **crypto In-App Purchasing system** compliant with the [rules/guidelines](https://brandonaaskov.notion.site/The-Apple-Pay-Flow-10ea358d903444298513ac42b1f383d8) companies like Apple have set for this type of purchases in mobile apps.
@@ -131,7 +129,6 @@ The sample includes:
 
   Open the [solution](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules.sln) with your preferred IDE, open [``SingletonModule.cs``](https://github.com/openfort-xyz/iap-unity-sample/blob/main/ugs-backend/CloudCodeModules/SingletonModule.cs) and fill in these variables:
 
-  //TODO
   <div align="center">
     <img
       width="50%"
@@ -150,8 +147,21 @@ The sample includes:
 
 - ### Package Code
   Follow [the official documentation steps](https://docs.unity.com/ugs/en-us/manual/cloud-code/manual/modules/getting-started#Package_code).
+
 - ### Deploy to UGS
   Follow [the official documentation steps](https://docs.unity.com/ugs/en-us/manual/cloud-code/manual/modules/getting-started#Deploy_a_module_project).
+
+- ### Add a currency to UGS project
+  Follow [the official documentation steps](https://docs.unity.com/ugs/en-us/manual/economy/manual/add-currency) to add a currency to your game:
+
+  <div align="center">
+    <img
+      width="50%"
+      height="50%"
+      src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample2_7de4fc0554.png?updated_at=2024-02-13T23:51:37.496Z"
+      alt='UGS currency'
+    />
+    </div>
 
 ## Set up [``unity-client``](https://github.com/openfort-xyz/iap-unity-sample/tree/main/unity-client)
 
@@ -427,7 +437,7 @@ Upon completing the above steps, your Unity game will be fully integrated with O
 For a deeper understanding of the underlying processes, check out the [tutorial video](//TODO). 
 
 ## Get support
-If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](https://github.com/openfort-xyz/samples/issues)).
+If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](https://github.com/openfort-xyz/samples/issues).
 
 If you have questions, or comments, or need help with code, we're here to help:
 - on Twitter at https://twitter.com/openfortxyz

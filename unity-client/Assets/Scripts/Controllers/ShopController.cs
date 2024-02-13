@@ -173,6 +173,8 @@ public class ShopController : BaseController, IDetailedStoreListener
     
     public void PurchaseItem(string itemId)
     {
+        statusText.Set("Purchasing item...", 10f);
+        
         var product = _storeController.products.WithID(itemId);
         if (product != null && product.availableToPurchase)
         {

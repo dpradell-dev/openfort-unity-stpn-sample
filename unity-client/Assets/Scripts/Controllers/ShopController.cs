@@ -130,7 +130,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     
     private void InitializeIAP()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_WEBGL
         StandardPurchasingModule.Instance().useFakeStoreUIMode = FakeStoreUIMode.StandardUser;
         StandardPurchasingModule.Instance().useFakeStoreAlways = true;
 #endif

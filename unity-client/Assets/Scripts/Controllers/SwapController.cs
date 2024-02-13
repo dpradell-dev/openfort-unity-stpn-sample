@@ -50,7 +50,7 @@ public class SwapController : BaseController
         }
     }
     
-    private async UniTask DecreaseCurrencyBalance(int amount)
+    public async UniTask DecreaseCurrencyBalance(int amount)
     {
         try
         {

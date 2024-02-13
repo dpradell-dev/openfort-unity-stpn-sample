@@ -18,6 +18,8 @@ public class CurrencyBalanceController : BaseController
         EconomyService.Instance.PlayerBalances.BalanceUpdated += async currencyID => 
         {
             Debug.Log($"The currency that was updated was {currencyID}");
+
+            await UniTask.Delay(1000);
             currencyBalanceText.text = await GetCurrencyBalance();
             cryptoCurrencyBalanceText.text = await GetCryptoBalanceInString();
         };

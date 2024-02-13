@@ -8,19 +8,25 @@ public class InventoryController : BaseController
 {
     // Get inventory view component
     public InventoryView inventoryView;
+
+    [Header("Other controllers")] public ShopController shopController;
     
     [Header("NFT related")]
     public Transform content;
     public NftPrefab nftPrefab;
 
+    private string _nftCryptoPrice; // The price of the NFT
+
     private void OnEnable()
     {
+        shopController.OnNftPurchaseStarted += ShopController_OnNftPurchaseStarted_Handler;
         NftPrefab.OnSellButtonPressed += NftPrefab_OnSellButtonPressed_Handler;
         CloudCodeMessager.Instance.OnSellNftSuccessful += CloudCodeMessager_OnSellNftSuccessful_Handler;
     }
 
     private void OnDisable()
     {
+        shopController.OnNftPurchaseStarted -= ShopController_OnNftPurchaseStarted_Handler;
         NftPrefab.OnSellButtonPressed -= NftPrefab_OnSellButtonPressed_Handler;
         CloudCodeMessager.Instance.OnSellNftSuccessful -= CloudCodeMessager_OnSellNftSuccessful_Handler;
     }
@@ -76,7 +82,7 @@ public class InventoryController : BaseController
                 foreach (var nft in inventoryList.Data)
                 {
                     var instantiatedNft = Instantiate(nftPrefab, content);
-                    instantiatedNft.Setup(nft.AssetType.ToString(), nft.TokenId.ToString());
+                    instantiatedNft.Setup(nft.AssetType.ToString(), nft.TokenId.ToString(), _nftCryptoPrice);
                     
                     Debug.Log(nft);
                 }
@@ -96,6 +102,12 @@ public class InventoryController : BaseController
     {
         statusText.Set("NFT sold successfully.", 5f);
         inventoryView.ClearItem(soldTokenId);
+    }
+    
+    private void ShopController_OnNftPurchaseStarted_Handler(string nftCryptoPrice)
+    {
+        // We only spent crypto for buying NFT. We want to save the price so we can populate it later.
+        _nftCryptoPrice = nftCryptoPrice;
     }
     
     private void NftPrefab_OnSellButtonPressed_Handler(string tokenId)

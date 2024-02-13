@@ -9,6 +9,7 @@ public class NftPrefab : MonoBehaviour
     public static event UnityAction<string> OnSellButtonPressed;
     public TextMeshProUGUI assetTypeText;
     public TextMeshProUGUI tokenIdText;
+    public TextMeshProUGUI cryptoPriceText;
     public Button sellButton;
     
     private string _tokenId;
@@ -20,10 +21,11 @@ public class NftPrefab : MonoBehaviour
         sellButton.interactable = true;
     }
 
-    public void Setup(string assetType, string tokenId)
+    public void Setup(string assetType, string tokenId, string cryptoPrice)
     {
         assetTypeText.text = assetType;
         tokenIdText.text = "ID: " + tokenId;
+        cryptoPriceText.text = "SELL: " + cryptoPrice;
 
         _tokenId = tokenId;
     }

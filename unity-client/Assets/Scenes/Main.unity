@@ -7230,6 +7230,7 @@ MonoBehaviour:
   viewPanel: {fileID: 289931601}
   statusText: {fileID: 1874908716}
   inventoryView: {fileID: 289931605}
+  shopController: {fileID: 262115555}
   content: {fileID: 1596905199}
   nftPrefab: {fileID: 7640152571703931443, guid: bd007ad19d9c8f64187d43236efcee41, type: 3}
 --- !u!1001 &2584772214853826367

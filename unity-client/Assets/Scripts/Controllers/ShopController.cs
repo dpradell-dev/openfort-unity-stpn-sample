@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Openfort.Model;
 using Unity.Services.CloudCode;
-using Unity.Services.CloudSave;
 using Unity.Services.Economy;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 
 public class ShopController : BaseController, IDetailedStoreListener
 {
+    public event UnityAction<string> OnNftPurchaseStarted;
+    
     [Header("Controllers")]
     public CurrencyBalanceController currencyBalanceController;
     public SwapController swapController;
@@ -68,12 +71,17 @@ public class ShopController : BaseController, IDetailedStoreListener
     private void ShopItem_OnIapBuyButtonClicked_Handler(string shopItemId, float shopItemCryptoPrice)
     {
         _currentMintPrice = (decimal)shopItemCryptoPrice; // We will need it later when we sell the nft
+        // We want to notify other controllers on the nft price
+        OnNftPurchaseStarted?.Invoke(_currentMintPrice.ToString(CultureInfo.InvariantCulture));
+        
         PurchaseItem(shopItemId);
     }
     
     private async void ShopItem_OnCurrencyBuyButtonClicked_Handler(string shopItemId, int price, float shopItemCryptoPrice)
     {
         _currentMintPrice = (decimal)shopItemCryptoPrice; // We will need it later when we sell the nft
+        // We want to notify other controllers on the nft price
+        OnNftPurchaseStarted?.Invoke(_currentMintPrice.ToString(CultureInfo.InvariantCulture));
         
         var product = _storeController.products.WithID(shopItemId);
         if (product == null || !product.availableToPurchase)
@@ -103,6 +111,8 @@ public class ShopController : BaseController, IDetailedStoreListener
     private async void ShopItem_OnCryptoBuyButtonClicked_Handler(string shopItemId, float price)
     {
         _currentMintPrice = (decimal)price; // We will need it later when we sell the nft
+        // We want to notify other controllers on the nft price
+        OnNftPurchaseStarted?.Invoke(_currentMintPrice.ToString(CultureInfo.InvariantCulture));
         
         var product = _storeController.products.WithID(shopItemId);
         if (product == null || !product.availableToPurchase)
@@ -312,6 +322,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region ECONOMY_METHODS
+    //TODO use swap controller?
     private async UniTaskVoid BuyCurrency(string currencyId, int amount)
     {
         try
@@ -327,23 +338,6 @@ public class ShopController : BaseController, IDetailedStoreListener
             item.ActivateAnimation(false);
 
             statusText.Set($"{currencyId} currency purchased.");
-        }
-        catch (EconomyException e)
-        {
-            // Handle the error
-            Debug.LogError($"Failed to increment balance: {e.Message}");
-        }
-    }
-    
-    private async UniTaskVoid DecreaseCurrencyBalance(int amount)
-    {
-        try
-        {
-            // Await the asynchronous operation directly
-            var result = await EconomyService.Instance.PlayerBalances.DecrementBalanceAsync(GameConstants.UgsCurrencyId, amount);
-
-            // Continue with the rest of the code after the await
-            Debug.Log($"New balance: {result.Balance}");
         }
         catch (EconomyException e)
         {
@@ -402,7 +396,7 @@ public class ShopController : BaseController, IDetailedStoreListener
     #endregion
 
     #region CLOUD_CODE_CALLBACKS
-    private void CloudCodeMessager_OnMintNftSuccessful_Handler()
+    private async void CloudCodeMessager_OnMintNftSuccessful_Handler()
     {
         // We want to get the Non Consumable item, which represents the NFT
         try
@@ -417,16 +411,16 @@ public class ShopController : BaseController, IDetailedStoreListener
                     // Save the product receipt txId to Unity player cloud data
                     var product = _storeController.products.WithID(currentItem.id);
                     var txId = ExtractTxIdFromReceipt(product.receipt);
-                    CloudSaveHelper.SaveToCloud(GameConstants.ReceiptTransactionIdKey, txId);
+                    await CloudSaveHelper.SaveToCloud(GameConstants.ReceiptTransactionIdKey, txId);
                     break;
                 case BuyType.Currency:
                     // Decrease currency balance
                     Debug.Log($"Currency buy price is {_currencyBuyPrice}");
-                    DecreaseCurrencyBalance(_currencyBuyPrice);
+                    await swapController.DecreaseCurrencyBalance(_currencyBuyPrice);
                     break;
                 case BuyType.Crypto:
-                    var newBalance = currencyBalanceController.GetCryptoBalanceInString();
-                    // TODO some log?
+                    await UniTask.Delay(1000);
+                    await currencyBalanceController.GetCryptoBalanceInString();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -461,6 +455,9 @@ public class ShopController : BaseController, IDetailedStoreListener
     private async void CloudCodeMessager_OnCryptoCurrencyReceived(int amount)
     {
         statusText.Set("Crypto currency received.");
+
+        await UniTask.Delay(1000);
+        await CheckNonConsumableReceipt();
         await currencyBalanceController.GetCryptoBalanceInString();
     }
     #endregion

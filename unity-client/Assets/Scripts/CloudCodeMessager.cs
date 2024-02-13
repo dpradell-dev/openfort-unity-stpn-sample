@@ -20,7 +20,7 @@ public class CloudCodeMessager : Singleton<CloudCodeMessager>
     }
 
     private bool _isCooldownActive = false;
-    private const float CooldownDuration = 3.0f; // Cooldown duration in seconds
+    private const float CooldownDuration = 0.25f; // Cooldown duration in seconds
 
     private async Task SubscribeToCloudCodeMessages()
     {

@@ -276,19 +276,28 @@ public class ShopController : BaseController, IDetailedStoreListener
                         var txId = ExtractTxIdFromReceipt(nc.receipt);
                     
                         // Check with cloud save to see if it's the same txId
-                        var savedTxId = await CloudSaveHelper.LoadFromCloud(GameConstants.ReceiptTransactionIdKey);
-                        Debug.Log(savedTxId);
-
-                        if (txId == savedTxId)
+                        try
                         {
-                            // Non-consumable item has already been purchased
-                            GetShopItemById(nc.definition.id).MarkAsPurchased(true);
+                            var savedTxId = await CloudSaveHelper.LoadFromCloud(GameConstants.ReceiptTransactionIdKey);
+                            Debug.Log(savedTxId);
+                            
+                            if (txId == savedTxId)
+                            {
+                                // Non-consumable item has already been purchased
+                                GetShopItemById(nc.definition.id).MarkAsPurchased(true);
+                            }
+                            else
+                            {
+                                Debug.Log("Receipt tx ID's are not the same.");
+                                // It's not the product receipt of this player.
+                                GetShopItemById(nc.definition.id).MarkAsPurchased(false);
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                            Debug.Log("Receipt tx ID's are not the same.");
-                            // It's not the product receipt of this player.
+                            Console.WriteLine(e);
                             GetShopItemById(nc.definition.id).MarkAsPurchased(false);
+                            throw;
                         }
                     }
                 }

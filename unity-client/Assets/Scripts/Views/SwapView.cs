@@ -67,7 +67,7 @@ public class SwapView : MonoBehaviour
         Debug.Log($"Buying crypto currency, amount: {balanceInt}");
         
         EnableButtons(false);
-        _swapController.BuyCryptoCurrency(balanceInt);
+        await _swapController.BuyCryptoCurrency(balanceInt);
     }
 
     private void EnableButtons(bool enable)

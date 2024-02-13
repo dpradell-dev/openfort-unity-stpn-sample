@@ -22,7 +22,7 @@ public class SwapController : BaseController
         viewPanel.SetActive(activate);    
     }
     
-    public async void BuyCryptoCurrency(decimal amount)
+    public async UniTask BuyCryptoCurrency(decimal amount)
     {
         statusText.Set("Buying crypto currency...");
 
@@ -50,7 +50,7 @@ public class SwapController : BaseController
         }
     }
     
-    private async UniTaskVoid DecreaseCurrencyBalance(int amount)
+    private async UniTask DecreaseCurrencyBalance(int amount)
     {
         try
         {

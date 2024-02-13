@@ -39,7 +39,7 @@ The sample includes:
 
 + **Get started with Apple Developer Account**
   + [Set up everything needed for Apple development](https://developer.apple.com/help/account/)
-  + Make sure to [sign the Paid Apps agreement](https://developer.apple.com/help/app-store-connect/manage-agreements/sign-and-update-agreements) as it's needed for testing IAP.
+  + Make sure to [sign the Paid Apps agreement](https://developer.apple.com/help/app-store-connect/manage-agreements/sign-and-update-agreements) and fill tax and banking details as it's needed for testing IAP.
 
 ## Setup Openfort dashboard
   
@@ -95,8 +95,7 @@ The sample includes:
     />
     </div>
 
-    //TODO add two developer accounts
-  + [Add a Developer Account](https://dashboard.openfort.xyz/accounts)
+  + [Add a Treasury Developer Account](https://dashboard.openfort.xyz/accounts)
 
     Enter a name and choose ***Add account***:
 
@@ -109,7 +108,22 @@ The sample includes:
     />
     </div>
 
-    This will automatically create a custodial wallet that we'll use to send the ERC20 tokens to the players. **IMPORTANT: Transfer a good amount of tokens from the created ERC20 contract to this wallet to facilitate testing**.
+    This will automatically create a custodial wallet that we'll use to transfer the ERC20 tokens to the players. **IMPORTANT: Transfer a good amount of tokens from the created ERC20 contract to this wallet to facilitate testing**.
+
+  + [Add a Minting Developer Account](https://dashboard.openfort.xyz/accounts)
+
+    Enter a name and choose ***Add account***:
+
+    <div align="center">
+    <img
+      width="50%"
+      height="50%"
+      src="https://blog-cms.openfort.xyz/uploads/iap_sample_23_74b85444b2.png?updated_at=2023-12-31T16:09:09.921Z"
+      alt='Minting Developer account'
+    />
+    </div>
+
+    This will automatically create a custodial wallet that the players will transfer the NFTs to when they choose the sell them. They'll get rewarded from the Treasury Dev Account afterwards.
 
 ## Set up [`ugs-backend`](https://github.com/openfort-xyz/iap-unity-sample/tree/main/ugs-backend)
 
@@ -122,7 +136,7 @@ The sample includes:
     <img
       width="50%"
       height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_2_b14ed6e743.png?updated_at=2023-12-31T16:17:12.709Z"
+      src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample1_9ab5bedd91.png?updated_at=2024-02-13T23:41:17.097Z"
       alt='Singleton Module'
     />
     </div>
@@ -131,8 +145,8 @@ The sample includes:
   - `OfNftContract`: [Retrieve the **NFT contract API ID**](https://dashboard.openfort.xyz/assets)
   - `OfGoldContract`: [Retrieve the **ERC20 contract API ID**](https://dashboard.openfort.xyz/assets)
   - `OfSponsorPolicy`: [Retrieve the **Policy API ID**](https://dashboard.openfort.xyz/policies)
-  - `OfDevAccount`: [Retrieve the **Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
-  - `TODO`: [Retrieve the **Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
+  - `OfDevTreasuryAccount`: [Retrieve the **Treasury Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
+  - `OfDevMintingAccount`: [Retrieve the **Minting Developer Account API ID**](https://dashboard.openfort.xyz/accounts)
 
 - ### Package Code
   Follow [the official documentation steps](https://docs.unity.com/ugs/en-us/manual/cloud-code/manual/modules/getting-started#Package_code).

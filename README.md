@@ -209,222 +209,130 @@ Your UGS project dashboard should look like this:
     />
 </div>
 
-## Test in Editor
+## Android deployment
 
-Play the **Main** scene and you should see the sign-in panel:
+  + ### Build App Bundle
 
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_20_8940611454.png?updated_at=2024-01-02T12:23:00.990Z"
-      alt='Sign in panel'
-    />
-</div>
-
-Choose ***Sign in***. The first time it will create a new player but the next time it will sign in as the same player. After some authentication-related logs, this panel should appear:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_3_478298f237.png?updated_at=2023-12-27T11:22:46.793Z"
-      alt='Game Scene'
-    />
-</div>
-
-Here you have two options:
-+ Purchase ERC20 tokens (x10)
-+ Purchase NFT
-
-By clicking any of them, a *Fake Store* panel will pop up, letting you confirm or cancel the purchase:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_4_a04e9420ed.png?updated_at=2023-12-27T15:44:43.689Z"
-      alt='Game Scene'
-    />
-</div>
-
-If you confirm, after a brief period you should see the *Transaction successful* message:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_5_ac991ecb2a.png?updated_at=2023-12-27T15:48:49.186Z"
-      alt='Game Scene'
-    />
-</div>
-
-You can then click on the inventory icon to see the representation of your on-chain assets:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_6_fd93f3f3a2.png?updated_at=2023-12-27T15:51:49.900Z"
-      alt='Game Scene'
-    />
-</div>
-
-In the [Openfort Players dashboard](https://dashboard.openfort.xyz/players), a new player entry should be visible. On selecting this player:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/playfab_opensea_img_34_706b0d267e.png?updated_at=2023-11-19T11:06:46.177Z"
-      alt='Player Entry'
-    />
-</div>
-
-You'll notice that a `mint` transaction has been successfully processed:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/ugs_integration_7_75cf7a4264.png?updated_at=2023-12-14T16:05:01.500Z"
-      alt='Mint Transaction'
-    />
-</div>
-
-Additionally, by choosing your **Mumbai Account** and viewing ***NFT Transfers***, the transaction is further confirmed:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/ugs_integration_8_6b345bd148.png?updated_at=2023-12-14T16:05:00.991Z"
-      alt='Etherscan'
-    />
-</div>
-
-## Build App Bundle
-
-In Unity go to [*Android Player settings*](https://docs.unity3d.com/Manual/class-PlayerSettingsAndroid.html) and make sure *Other Settings* looks like this:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_7_e6ec7eb903.png?updated_at=2023-12-28T07:47:59.386Z"
-      alt='Android Player settings'
-    />
-</div>
-
-Also, make sure to sign the application with a [Keystore](https://docs.unity3d.com/Manual/android-keystore-create.html) in *Publishing Settings*:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_8_ecae38df0e.png?updated_at=2023-12-28T07:47:59.307Z"
-      alt='Application Signing'
-    />
-</div>
-
-Then go to *Build Settings*, check ***Build App Bundle (Google Play)*** and choose ***Build***:
-
-<div align="center">
-    <img
-      width="50%"
-      height="50%"
-      src="https://blog-cms.openfort.xyz/uploads/iap_sample_9_6d1e1a5636.png?updated_at=2023-12-28T07:52:15.586Z"
-      alt='Build'
-    />
-</div>
-
-## Set up Google Play Console
-
-- ### Create internal release
-
-  On your [Google Play Console](https://play.google.com/console/u/0/developers/7556582789169418933?onboardingflow=signup) app, go to *Release --> Testing --> Internal testing --> Testers* and select or create an email list with the emails that will test your app. Then choose ***Create new release***:
+  In Unity go to [*Android Player settings*](https://docs.unity3d.com/Manual/class-PlayerSettingsAndroid.html) and make sure *Other Settings* looks like this:
 
   <div align="center">
       <img
         width="50%"
         height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_10_f700f82ef1.png?updated_at=2023-12-28T15:07:32.491Z"
-        alt='New release'
+        src="https://blog-cms.openfort.xyz/uploads/iap_sample_7_e6ec7eb903.png?updated_at=2023-12-28T07:47:59.386Z"
+        alt='Android Player settings'
       />
   </div>
 
-  Upload the `.aab` file and then choose ***Next***:
+  Also, make sure to sign the application with a [Keystore](https://docs.unity3d.com/Manual/android-keystore-create.html) in *Publishing Settings*:
 
   <div align="center">
       <img
         width="50%"
         height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_11_06459575df.png?updated_at=2023-12-28T15:07:33.382Z"
-        alt='Upload build'
+        src="https://blog-cms.openfort.xyz/uploads/iap_sample_8_ecae38df0e.png?updated_at=2023-12-28T07:47:59.307Z"
+        alt='Application Signing'
       />
   </div>
 
-  If needed, solve pending errors and warnings and then choose ***Save and publish***:
+  Then go to *Build Settings*, check ***Build App Bundle (Google Play)*** and choose ***Build***:
 
   <div align="center">
       <img
         width="50%"
         height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_12_da52624cb6.png?updated_at=2023-12-28T15:07:32.481Z"
-        alt='Save and publish'
-      />
-  </div>
-  
-- ### Import IAP catalog
-
-  On your [Google Play Console](https://play.google.com/console/u/0/developers/7556582789169418933?onboardingflow=signup) app, go to *Monetize --> Products --> In-app products* and choose ***Import***:
-
-  <div align="center">
-      <img
-        width="50%"
-        height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_13_04a57f78c6.png?updated_at=2023-12-28T15:07:32.484Z"
-        alt='Create product'
+        src="https://blog-cms.openfort.xyz/uploads/iap_sample_9_6d1e1a5636.png?updated_at=2023-12-28T07:52:15.586Z"
+        alt='Build'
       />
   </div>
 
-  Upload the [``GooglePlayProductCatalog.csv``](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/GooglePlayProductCatalog.csv) file (which contains all the in-app products) and choose ***Import***:
+  + ### Set up Google Play Console
+
+    - #### Create internal release
+
+      On your [Google Play Console](https://play.google.com/console/u/0/developers/7556582789169418933?onboardingflow=signup) app, go to *Release --> Testing --> Internal testing --> Testers* and select or create an email list with the emails that will test your app. Then choose ***Create new release***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/iap_sample_10_f700f82ef1.png?updated_at=2023-12-28T15:07:32.491Z"
+            alt='New release'
+          />
+      </div>
+
+      Upload the `.aab` file and then choose ***Next***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/iap_sample_11_06459575df.png?updated_at=2023-12-28T15:07:33.382Z"
+            alt='Upload build'
+          />
+      </div>
+
+      If needed, solve pending errors and warnings and then choose ***Save and publish***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/iap_sample_12_da52624cb6.png?updated_at=2023-12-28T15:07:32.481Z"
+            alt='Save and publish'
+          />
+      </div>
+    
+    - #### Import IAP catalog
+
+      On your [Google Play Console](https://play.google.com/console/u/0/developers/7556582789169418933?onboardingflow=signup) app, go to *Monetize --> Products --> In-app products* and choose ***Import***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/iap_sample_13_04a57f78c6.png?updated_at=2023-12-28T15:07:32.484Z"
+            alt='Create product'
+          />
+      </div>
+
+      Upload the [``GooglePlayProductCatalog.csv``](https://github.com/openfort-xyz/iap-unity-sample/blob/main/unity-client/Assets/GooglePlayProductCatalog.csv) file (which contains all the in-app products) and choose ***Import***:
+
+      <div align="center">
+            <img
+              width="50%"
+              height="50%"
+              src="https://blog-cms.openfort.xyz/uploads/iap_sample_14_9a114af583.png?updated_at=2023-12-28T15:07:32.397Z"
+              alt='Import products'
+            />
+      </div>
+
+      You should see all the products have been created:
+
+      <div align="center">
+            <img
+              width="50%"
+              height="50%"
+              src="https://blog-cms.openfort.xyz/uploads/iap_sample_15_45877d642d.png?updated_at=2023-12-28T15:07:32.278Z"
+              alt='Products created'
+            />
+      </div>
+
+  + ### Testing
+
+  Once the internal testing release is published, you have two options to test:
+
+  - Build and run the .apk directly to your device ([if the *version number* is the same as in the internal release](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Testing.html)).
+  - Download the app from Google Play through the internal testing link:
 
   <div align="center">
         <img
           width="50%"
           height="50%"
-          src="https://blog-cms.openfort.xyz/uploads/iap_sample_14_9a114af583.png?updated_at=2023-12-28T15:07:32.397Z"
-          alt='Import products'
+          src="https://blog-cms.openfort.xyz/uploads/iap_sample_21_f41d2c851f.png?updated_at=2023-12-28T16:06:28.194Z"
+          alt='Internal testing link'
         />
-  </div>
-
-  You should see all the products have been created:
-
-  <div align="center">
-        <img
-          width="50%"
-          height="50%"
-          src="https://blog-cms.openfort.xyz/uploads/iap_sample_15_45877d642d.png?updated_at=2023-12-28T15:07:32.278Z"
-          alt='Products created'
-        />
-  </div>
-
-## Test in Android
-
-Once the internal testing release is published, you have two options to test:
-
-- Build and run the .apk directly to your device ([if the *version number* is the same as in the internal release](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Testing.html)).
-- Download the app from Google Play through the internal testing link:
-
-<div align="center">
-      <img
-        width="50%"
-        height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_21_f41d2c851f.png?updated_at=2023-12-28T16:06:28.194Z"
-        alt='Internal testing link'
-      />
-  </div>
+    </div>
 
 ## Set up AppStore Connect
 

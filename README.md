@@ -209,6 +209,8 @@ Your UGS project dashboard should look like this:
     />
 </div>
 
+**Apple AppStore** doesn't need this *license key configuration* so if you're targeting **iOS** you're good to go. 
+
 ## Android deployment
 
   + ### Build App Bundle
@@ -334,8 +336,7 @@ Your UGS project dashboard should look like this:
           />
       </div>
 
-## Set up AppStore Connect
-
+## iOS deployment
 
 
 ## Conclusion

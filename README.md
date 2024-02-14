@@ -213,38 +213,38 @@ Your UGS project dashboard should look like this:
 
   + ### Build App Bundle
 
-  In Unity go to [*Android Player settings*](https://docs.unity3d.com/Manual/class-PlayerSettingsAndroid.html) and make sure *Other Settings* looks like this:
+    In Unity go to [*Android Player settings*](https://docs.unity3d.com/Manual/class-PlayerSettingsAndroid.html) and make sure *Other Settings* looks like this:
 
-  <div align="center">
-      <img
-        width="50%"
-        height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_7_e6ec7eb903.png?updated_at=2023-12-28T07:47:59.386Z"
-        alt='Android Player settings'
-      />
-  </div>
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/iap_sample_7_e6ec7eb903.png?updated_at=2023-12-28T07:47:59.386Z"
+          alt='Android Player settings'
+        />
+    </div>
 
-  Also, make sure to sign the application with a [Keystore](https://docs.unity3d.com/Manual/android-keystore-create.html) in *Publishing Settings*:
+    Also, make sure to sign the application with a [Keystore](https://docs.unity3d.com/Manual/android-keystore-create.html) in *Publishing Settings*:
 
-  <div align="center">
-      <img
-        width="50%"
-        height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_8_ecae38df0e.png?updated_at=2023-12-28T07:47:59.307Z"
-        alt='Application Signing'
-      />
-  </div>
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/iap_sample_8_ecae38df0e.png?updated_at=2023-12-28T07:47:59.307Z"
+          alt='Application Signing'
+        />
+    </div>
 
-  Then go to *Build Settings*, check ***Build App Bundle (Google Play)*** and choose ***Build***:
+    Then go to *Build Settings*, check ***Build App Bundle (Google Play)*** and choose ***Build***:
 
-  <div align="center">
-      <img
-        width="50%"
-        height="50%"
-        src="https://blog-cms.openfort.xyz/uploads/iap_sample_9_6d1e1a5636.png?updated_at=2023-12-28T07:52:15.586Z"
-        alt='Build'
-      />
-  </div>
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/iap_sample_9_6d1e1a5636.png?updated_at=2023-12-28T07:52:15.586Z"
+          alt='Build'
+        />
+    </div>
 
   + ### Set up Google Play Console
 
@@ -320,19 +320,19 @@ Your UGS project dashboard should look like this:
 
   + ### Testing
 
-  Once the internal testing release is published, you have two options to test:
+    Once the internal testing release is published, you have two options to test:
 
-  - Build and run the .apk directly to your device ([if the *version number* is the same as in the internal release](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Testing.html)).
-  - Download the app from Google Play through the internal testing link:
+    - Build and run the .apk directly to your device ([if the *version number* is the same as in the internal release](https://docs.unity3d.com/Packages/com.unity.purchasing@4.10/manual/Testing.html)).
+    - Download the app from Google Play through the internal testing link:
 
-  <div align="center">
-        <img
-          width="50%"
-          height="50%"
-          src="https://blog-cms.openfort.xyz/uploads/iap_sample_21_f41d2c851f.png?updated_at=2023-12-28T16:06:28.194Z"
-          alt='Internal testing link'
-        />
-    </div>
+    <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/iap_sample_21_f41d2c851f.png?updated_at=2023-12-28T16:06:28.194Z"
+            alt='Internal testing link'
+          />
+      </div>
 
 ## Set up AppStore Connect
 

@@ -405,42 +405,42 @@ Your UGS project dashboard should look like this:
           />
       </div>
 
-    + ### Set up App Store Connect app
-      
-      Go to [App Store Connect Apps](https://appstoreconnect.apple.com/apps), choose your newly uploaded app and under **Distribution --> In-App Purchases** add the purchases:
-
-      <div align="center">
-          <img
-            width="50%"
-            height="50%"
-            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample9_8bfb82b934.png?updated_at=2024-02-14T01:15:30.097Z"
-            alt='Build to Xcode: in-app purchases'
-          />
-      </div>
-
-      Remember to fill the same *Product ID* as you have set in your **Unity IAP Catalog**. Do it for all your products:
-
-      <div align="center">
-          <img
-            width="50%"
-            height="50%"
-            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample10_bace0d3453.png?updated_at=2024-02-14T01:15:29.278Z"
-            alt='Build to Xcode: catalog'
-          />
-      </div>
-
-      Go to the *TestFlight section* and choose ***Manage Missing Compliance*** for your build:
-
-      <div align="center">
-          <img
-            width="50%"
-            height="50%"
-            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample11_c1f23d62a9.png?updated_at=2024-02-14T01:15:29.089Z"
-            alt='Build to Xcode: catalog'
-          />
-      </div>
+  + ### Set up App Store Connect app
     
-    + ### Testing
+    Go to [App Store Connect Apps](https://appstoreconnect.apple.com/apps), choose your newly uploaded app and under **Distribution --> In-App Purchases** add the purchases:
+
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample9_8bfb82b934.png?updated_at=2024-02-14T01:15:30.097Z"
+          alt='Build to Xcode: in-app purchases'
+        />
+    </div>
+
+    Remember to fill the same *Product ID* as you have set in your **Unity IAP Catalog**. Do it for all your products:
+
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample10_bace0d3453.png?updated_at=2024-02-14T01:15:29.278Z"
+          alt='Build to Xcode: catalog'
+        />
+    </div>
+
+    Go to the *TestFlight section* and choose ***Manage Missing Compliance*** for your build:
+
+    <div align="center">
+        <img
+          width="50%"
+          height="50%"
+          src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample11_c1f23d62a9.png?updated_at=2024-02-14T01:15:29.089Z"
+          alt='Build to Xcode: catalog'
+        />
+    </div>
+  
+  + ### Testing
 
     Go to *Internal Testers* ([add testers](https://developer.apple.com/help/app-store-connect/test-a-beta-version/add-testers-to-builds/)) and you should see your build ready to be tested:
 

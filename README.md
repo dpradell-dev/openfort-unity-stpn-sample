@@ -338,6 +338,122 @@ Your UGS project dashboard should look like this:
 
 ## iOS deployment
 
+  + ### Xcode: Build & Archive & Upload
+    In Unity go to *File --> Build Settings* and choose ***Build And Run***:
+
+    <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample3_40c42ce5e4.png?updated_at=2024-02-14T00:26:54.820Z"
+            alt='Build to Xcode'
+          />
+      </div>
+
+    This will automatically open Xcode. If you encounter a `signing error`, select your development team and enable ***Automatically manage signing***:
+
+    <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample4_9e12130585.png?updated_at=2024-02-14T00:34:32.096Z"
+            alt='Build to Xcode: error'
+          />
+      </div>
+
+      Start the building process again **(cmd + B)** and when completed, go to ***Product --> Archive***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample5_f10cfb74a1.png?updated_at=2024-02-14T00:41:32.549Z"
+            alt='Build to Xcode: archive'
+          />
+      </div>
+
+      After completing, choose ***Distribute App***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample6_85f8e46b54.png?updated_at=2024-02-14T00:47:23.087Z"
+            alt='Build to Xcode: Distribute app'
+          />
+      </div>
+
+      Select ***TestFlight & App Store*** to enable both internal and external testing and choose ***Distribute***:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample7_7b3068a974.png?updated_at=2024-02-14T01:15:28.984Z"
+            alt='Build to Xcode: distribute'
+          />
+      </div>
+
+      The app will be uploaded to **App Store Connect**:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample8_f5a647899b.png?updated_at=2024-02-14T01:15:28.680Z"
+            alt='Build to Xcode: complete'
+          />
+      </div>
+
+    + ### Set up App Store Connect app
+      
+      Go to [App Store Connect Apps](https://appstoreconnect.apple.com/apps), choose your newly uploaded app and under **Distribution --> In-App Purchases** add the purchases:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample9_8bfb82b934.png?updated_at=2024-02-14T01:15:30.097Z"
+            alt='Build to Xcode: in-app purchases'
+          />
+      </div>
+
+      Remember to fill the same *Product ID* as you have set in your **Unity IAP Catalog**. Do it for all your products:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample10_bace0d3453.png?updated_at=2024-02-14T01:15:29.278Z"
+            alt='Build to Xcode: catalog'
+          />
+      </div>
+
+      Go to the *TestFlight section* and choose ***Manage Missing Compliance*** for your build:
+
+      <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample11_c1f23d62a9.png?updated_at=2024-02-14T01:15:29.089Z"
+            alt='Build to Xcode: catalog'
+          />
+      </div>
+    
+    + ### Testing
+
+    Go to *Internal Testers* ([add testers](https://developer.apple.com/help/app-store-connect/test-a-beta-version/add-testers-to-builds/)) and you should see your build ready to be tested:
+
+    <div align="center">
+          <img
+            width="50%"
+            height="50%"
+            src="https://blog-cms.openfort.xyz/uploads/unity_iap_advanced_sample12_2db9d9b6f4.png?updated_at=2024-02-14T01:15:29.491Z"
+            alt='Build to Xcode: testers'
+          />
+      </div>
+
+    Open the TestFlight in the iOS device where your tester Apple ID is configured and test the app!
 
 ## Conclusion
 

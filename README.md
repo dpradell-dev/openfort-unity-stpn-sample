@@ -459,7 +459,7 @@ Your UGS project dashboard should look like this:
 
 Upon completing the above steps, your Unity game will be fully integrated with Openfort and Unity In-App Purchasing service. Always remember to test every feature before deploying to guarantee a flawless player experience.
 
-For a deeper understanding of the underlying processes, check out the [tutorial video](//TODO). 
+For a deeper understanding of the underlying processes, check out the [tutorial video](https://www.youtube.com/watch?v=37yAu7YQXhg). 
 
 ## Get support
 If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](https://github.com/openfort-xyz/samples/issues).
